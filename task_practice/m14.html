@@ -39,7 +39,7 @@ var aqiData = [
   for(var i=0;i<aqiData.length;i++){
     if(aqiData[i][1] > 60){    //find a needed city
       var li = document.createElement("li");
-      li.appendChild(document.createTextNode("第" + chineseNumbers[i] + "名：" + aqiData[i][0] + "，" + aqiData[i][1]));
+      li.appendChild(document.createTextNode("第"+chineseNumbers[i]+"名"+aqiData[i]+"，"+aqiData[i][1]));
       document.getElementById("aqi-list").appendChild(li);
     }
   }  

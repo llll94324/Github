@@ -10,7 +10,7 @@
   <ul id="aqi-list">
 <!--   
     <li>第一名：福州（样例），10</li>
-    <li>第二名：福州（样例），10</li> -->
+  	<li>第二名：福州（样例），10</li> -->
   </ul>
 
 <script type="text/javascript">
@@ -29,26 +29,23 @@ var aqiData = [
   将空气质量指数大于60的城市显示到aqi-list的列表中
   */
   
-  //firstly ,sort the aqiData array.
-  aqiData.sort(function (d1,d2){
-    return d2[1] - d1[1];
-  });
-  
   var chineseNumbers = ["一","二","三","四","五","六","七","八","九","十"];
   
-  for(var i=0;i<aqiData.length;i++){
-    if(aqiData[i][1] > 60){    //find a needed city
-      var li = document.createElement("li");
-      li.appendChild(document.createTextNode("第"+chineseNumbers[i]+"名"+aqiData[i]+"，"+aqiData[i][1]));
-      document.getElementById("aqi-list").appendChild(li);
-    }
-  }  
- 
+  var list = "";
+  aqiData.filter(function(limit){return limit[1]>60;})
+         .sort(function(a,b){return b[1]-a[1];})
+         .forEach( function(element, index) {
+          // statements
+          list += "<li>第" + chineseNumbers[index] + "名" + element[0] + "，" + element[1] + "</li>";
+        });
+   document.getElementById("aqi-list").innerHTML = list;
+  
 })();
 </script>
   <hr />
   <p>
-    使用了array.sort、document.createElement、document.createTextNode、node.appendChild等方法；
+    使用了array.filter、array.sort，使用了array.forEach方法来代替for循环遍历处理数组元素，使用了这三个数组函数的链式调用；
+    使用了element.innerHTML属性一次性改变元素的DOM结构
   </p>
   
 </body>
