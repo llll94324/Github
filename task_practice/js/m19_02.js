@@ -17,6 +17,7 @@ function renderList () {
 
 function add(jj){
     var inputValue = document.getElementById("input").value;
+
     if(inputValue.match(/^\d+$/)){
         var div = document.createElement("div");
         div.onclick = function(event){event.target.remove();};
@@ -93,7 +94,7 @@ btn[3].onclick = function (){
 
 btn[4].onclick = function(){
     var interval = document.getElementById("interval").value;
-    if(interval<64) interval = 64;
+  //  if(interval<64) interval = 64;
     dataList = [];
     var i = 0;
     var x = 1;
@@ -102,11 +103,12 @@ btn[4].onclick = function(){
     var timer = setInterval(function(){
 
         var y=i+x*2;
+        if(y>=dataList.length) y=dataList.length;
         for(var z = i; z<y; z++){
             divColor[z].style.background = "green";
         }
         setTimeout(function(){
-           merge(dataList.slice(i,i+x),dataList.slice(i+x,i+x*2),i,interval);
+            merge(dataList.slice(i,i+x),dataList.slice(i+x,i+x*2),i,interval);
             i=i+x*2;
             if(i>=dataList.length){
                 i=0;
