@@ -31,8 +31,8 @@ function add(jj){
 
 function merge(left, right,i,interval) {
     var counter = left.length + right.length;
-    /*有層次效果印，後面會跑不出綠色效果*/
- /*   var start = setInterval(function(){
+    /*mode1有層次效果印，後面會跑不出綠色效果*/
+  /*  var start = setInterval(function(){
         var lock = 1;
         if(left.length && right.length && lock){
             dataList.splice(i,1, left[0] <= right[0] ? left.shift() : right.shift());
@@ -50,10 +50,10 @@ function merge(left, right,i,interval) {
         counter--;
         if(counter == 0) clearInterval(start);
 
-    }, interval/24)*/
+    }, interval/64)*/
         
 
-    /*一次印*/
+    /*mode2一次印*/
     while(counter){
         var lock = 1;
         if(left.length && right.length && lock){
