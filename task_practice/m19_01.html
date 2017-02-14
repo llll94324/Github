@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+            #list div {
+                display: inline-block;
+                font-size: 15px;
+                text-align: center;
+                padding: 0 0px;
+                margin: 10px 0;
+                margin-right: 3px;
+                line-height: 20px;                
+                background-color: #abaced;
+                color: #000000;
+                vertical-align:bottom;
+                width: 25px;
+            }
+            #list{
+                min-height: 600px;
+                vertical-align:bottom;
+            }
+            body{
+                background-color: #696969;
+            }
+        </style>
+</head>
+<body>
+	<input id ="input" type="text">
+	<button id="leftin">左側入</button>
+	<button id="rightin">右側入</button>
+	<button id="leftout">左側出</button>
+	<button id="rightout">右側出</button>
+    <button id="sort">排序</button>
+    <button id="random">隨機32</button>
+    <input id ="interval" type="text" placeholder="間隔(ms)" value="">
+	<br>
+	<div id = "list"></div>
+	<script src = "js/m19_01.js"></script>
+</body>
+</html>	
