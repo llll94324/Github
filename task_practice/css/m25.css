@@ -1,0 +1,49 @@
+.main , .btnList {
+	margin-left: 0px;
+	border-radius: 5px;
+	border : 5px solid #EEEEEE;
+	padding: 10px;
+	width: 300px;
+	margin-bottom: 40px;
+}
+.is-hidden{
+	display: none;
+}
+.show-up{
+	display: block;
+	padding-left: 20px;
+}
+.listImg{
+	vertical-align : middle;
+	margin: auto;
+	cursor: pointer;
+	height: 25px;
+	width: 30px;
+}
+.classBlock{
+	display: block;
+	margin: 10px;
+	width: auto;
+	height: auto;
+}
+.subtitle{
+	padding: 0 5px;
+	cursor: pointer;
+	color : #000000;
+	font-size: 18px;      
+}
+.addElement{
+	position: absolute;
+	border : 5px solid #EEEEEE;
+	padding: 10px;
+	border-radius: 5px;
+}
+.addElement button , .addElement input{
+	display: block;
+	margin: 20px;
+}
+#addBlockP{
+	margin: 0;
+	font-size: 25px;
+	color: red;
+}
