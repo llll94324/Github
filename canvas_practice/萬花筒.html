@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		canvas{
+			background-color: #eee
+		}
+	</style>
+	<script type="text/javascript">
+		window.onload = function  () {
+			var canvas = document.getElementById("canvas");
+			var cobj = canvas.getContext("2d");
+			var angle = 0;
+			var num = 150;
+			var arr = [];
+			var timer = setInterval(function(){
+				cobj.clearRect(0,0,600,600);
+				for (var i = 0; i < arr.length; i++) {
+					cobj.save();
+					cobj.translate(300,300);
+					cobj.scale(arr[i].scales,arr[i].scales);
+					cobj.rotate(arr[i].angle*Math.PI/180);
+					cobj.fillStyle = arr[i].color;
+					cobj.fillRect(arr[i].num,arr[i].num,30,30);
+					cobj.restore();
+				}
+				
+			},10);
+
+			setInterval(function(){
+				for (var i = 0; i < arr.length; i++) {
+					if(arr[i].num<=0) {
+						arr.splice(i,1);
+						continue;
+					}
+					arr[i].angle++;
+					arr[i].num-=0.0666;
+					arr[i].scales-=0.0002;
+				}
+			},10);
+
+			setInterval(function(){
+				var rect = {angle:0,
+					num:150,
+					scales:1,
+					color:"rgb("+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+")"};
+				arr.push(rect);
+			},200);
+
+		}
+	</script>
+</head>
+
+<body style="background-color: #696969">
+	<canvas width="600" height="600" id="canvas">
+		
+	</canvas>
+</body>
+</html>
