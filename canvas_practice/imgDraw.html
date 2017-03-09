@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		canvas{
+			background-color: #eee
+		}
+	</style>
+	
+</head>
+
+<body style="background-color: #696969">
+	<canvas width="500" height="500" id="canvas">
+		
+	</canvas>
+</body>
+<script type="text/javascript">
+		//window.onload = function  () {
+			var canvas = document.getElementById("canvas");
+			var cobj = canvas.getContext("2d");
+			
+			var arr = [];
+
+			for (var i = 0; i < 5; i++) {
+				var arcObj = {
+					x:(i+1)*50,
+					y:(i+1)*50,
+					r:(i+1)*15,
+					startA:0,
+					endA:2*Math.PI
+				};
+				arr.push(arcObj);
+			}
+
+			function drawArc(){
+				for (var i = 0; i < arr.length; i++) {
+					cobj.beginPath();
+					cobj.arc(arr[i].x,arr[i].y,arr[i].r,arr[i].startA,arr[i].endA);
+					cobj.fill();
+				}
+			}
+
+			drawArc();
+
+			canvas.onmousedown = function(e){
+				//var mx = e.layerX;
+			//	var my = e.layerY;
+				canvas.onmousemove = function(e){
+					cobj.clearRect(0,0,500,500);
+					var mx = e.layerX;
+					var my = e.layerY;
+
+					for (var i = 0; i < arr.length; i++) {
+						var str = arr[i].x+","+arr[i].y+","+arr[i].r+","+arr[i].startA+","+arr[i].endA;
+						event = new addEvent(cobj,"arc",str,function(){
+							cobj.beginPath();
+							cobj.arc(mx,my,arr[i].r,arr[i].startA,arr[i].endA);
+							cobj.fill();
+							arr[i].x = mx;
+							arr[i].y = my;
+						})
+						event.add(mx,my);
+					}
+
+				}
+				canvas.onmouseup = function(){
+					canvas.onmousemove = null;
+					canvas.onmouseup = null;
+				}
+			};
+		//}
+
+		function addEvent(cobj,type,data,callback){
+			this.cobj = cobj;
+			this.type = type;
+			this.data = data;
+			this.callback = callback;
+			this.redraw();
+		}
+
+		addEvent.prototype = {
+			redraw : function(){
+				if(this.type == "arc"){
+					this.cobj.beginPath();
+					var arr = this.data.split(",");
+					this.cobj.arc(arr[0],arr[1],arr[2],arr[3],arr[4]);
+					this.cobj.fill();
+				}
+			},
+			add:function(mx,my){
+				if(this.cobj.isPointInPath(mx,my)){
+					this.callback();
+				}
+			}
+		};
+
+
+	</script>
+</html>

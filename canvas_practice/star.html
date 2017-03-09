@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		canvas{
+			background-color: #eee
+		}
+	</style>
+	<script type="text/javascript">
+		window.onload = function  () {
+			var canvas = document.getElementById("canvas");
+			var cobj = canvas.getContext("2d");
+			var starArr = [];
+
+			for (var i = 0; i < 36; i++) {
+				var starObj = {
+					radius1:20+10*Math.random(),
+					radius2:7+8*Math.random(),
+					x:30+(canvas.width-60)*Math.random(),
+					y:30+(canvas.width-60)*Math.random(),
+					num:Math.ceil(4+4*Math.random()),
+					color:"rgb("+parseInt(255*Math.random())+","+parseInt(255*Math.random())+","+parseInt(255*Math.random())+")",
+					angle:360*Math.random(),
+					changeAngle:10*Math.random()-5
+				};
+
+				starArr.push(starObj);
+			}
+			
+
+
+
+			setInterval(function(){
+				cobj.clearRect(0,0,500,500);
+				for (var i = 0; i < starArr.length; i++) {
+					cobj.save();
+					cobj.beginPath();
+					cobj.translate(starArr[i].x,starArr[i].y);
+					cobj.rotate(starArr[i].angle*Math.PI/180);
+					cobj.scale(Math.sin(starArr[i].angle*Math.PI/180),Math.sin(starArr[i].angle*Math.PI/180));
+					cobj.globalAlpha = Math.abs(Math.sin(starArr[i].angle*Math.PI/180));
+					drawStar(0,0,starArr[i].radius1,starArr[i].radius2,starArr[i].num,"fill",starArr[i].color);
+					cobj.restore();
+					starArr[i].angle+=starArr[i].changeAngle;
+				}
+				
+				
+			},20);
+
+			function drawStar(x,y,radius1,radius2,num,drawType,color){
+				var angle = 360/(num*2);
+				var arr = [];
+				for (var i = 0; i < num*2; i++) {
+					var starObj = {};
+					if(i%2==0){
+						starObj.x = x+radius1*Math.cos(i*angle*Math.PI/180);
+						starObj.y = y+radius1*Math.sin(i*angle*Math.PI/180);
+					}else{
+						starObj.x = x+radius2*Math.cos(i*angle*Math.PI/180);
+						starObj.y = y+radius2*Math.sin(i*angle*Math.PI/180);
+					}
+					arr.push(starObj);
+				}
+
+				cobj.beginPath();
+				cobj.fillStyle = color;
+				cobj.strokeStyle = color;
+				cobj.moveTo(arr[0].x,arr[0].y);
+				for (var i = 1; i < arr.length; i++) {
+					cobj.lineTo(arr[i].x,arr[i].y);
+				}
+				cobj.closePath();
+				if(drawType=="fill"){
+					cobj.fill();
+				}else {
+					cobj.stroke();
+				}
+
+			}
+		}
+	</script>
+</head>
+
+<body style="background-color: #696969">
+	<canvas width="500" height="500" id="canvas">
+		
+	</canvas>
+</body>
+</html>

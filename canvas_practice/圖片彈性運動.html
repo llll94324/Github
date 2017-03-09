@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		html{
+			background: "#696969";
+			overflow: hidden; 
+		}
+	</style>
+	
+</head>
+
+<body style="background-color: #696969">
+	<canvas id="canvas">
+		 
+	</canvas>
+	<img src="img/1.jpg" hidden>
+	<img src="img/2.jpg" hidden>
+	<img src="img/3.jpg" hidden>
+	<img src="img/4.jpg" hidden>
+	<img src="img/5.jpg" hidden>
+</body>
+<script type="text/javascript">
+		window.onload = function  () {
+			var canvas = document.getElementById("canvas");
+			canvas.width = document.documentElement.clientWidth;
+			canvas.height = document.documentElement.clientHeight;
+			canvas.style.background = "#696969";
+			var cobj = canvas.getContext("2d");
+			var imgs = document.getElementsByTagName("img");
+			var spring = 0.3;
+			var friction = 0.8;
+			var timer;
+			
+			cobj.beginPath();
+			cobj.fillStyle = "#aa77cc";
+			cobj.rect(0,0,100,40);
+			cobj.fill();
+			canvas.onclick = function(e){
+				var mx = e.layerX;
+				var my = e.layerY;
+				if(cobj.isPointInPath(mx,my)){
+					clearInterval(timer);
+					var arr = create();
+					timer = setInterval(function(){
+						cobj.clearRect(0,0,canvas.width,canvas.height);
+						for (var j = 0; j < arr.length; j++) {
+							move(arr[j]);
+						}
+						cobj.beginPath();
+						cobj.fillStyle = "#aa77cc";
+						cobj.rect(0,0,100,40);
+						cobj.fill();
+					},20);
+				}
+			}
+
+			function move(obj){
+				//彈性公式
+				obj.vx+=(obj.targetx-obj.changex)*spring;
+				obj.vy+=(obj.targety-obj.changey)*spring;
+				obj.changex+=(obj.vx*=friction);
+				obj.changey+=(obj.vy*=friction);
+				cobj.beginPath();
+				cobj.lineWidth = 8;
+				cobj.strokeStyle = "#fff";
+				cobj.moveTo(obj.startx,obj.starty);
+				cobj.lineTo(obj.changex,obj.changey);
+				cobj.stroke();
+				cobj.drawImage(obj.src,obj.changex-obj.width/2,obj.changey,obj.width,obj.height);
+			}
+
+			function create(){
+				var imgArr = [];
+				for (var i = 0; i < 5; i++) {
+					var srcObj;
+					srcObj = imgs[i];
+					
+					var imgObj = {src:srcObj,vx:0,vy:0,width:220,height:220,
+						startx:220*(i+1)+50,starty:0,
+						targetx:220*(i+1)+50,targety:200+300*Math.random(),
+						changex:220*(i+1)-100*Math.random(),changey:-100,};
+
+					imgArr.push(imgObj);
+
+				}
+				return imgArr;
+			}
+			
+		}
+	</script>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style type="text/css">
+		canvas{
+			background-color: #eee
+		}
+	</style>
+	
+</head>
+
+<body style="background-color: #696969">
+	<canvas width="500" height="500" id="canvas">
+		
+	</canvas>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas");
+	var cobj = canvas.getContext("2d");
+	var arr = [];
+
+	function createArr(step){
+		for (var i = 0; i < step; i++) {
+			var rectObj = {
+				width:50,
+				height:50,
+				color:"rgb("+parseInt(255*Math.random())+","+parseInt(255*Math.random())+","+parseInt(255*Math.random())+")"
+			}
+			arr.push(rectObj);
+		}
+	}
+	
+	createArr(18);
+
+	var newArr = [];
+	var newArr1 = [];
+	function sum(){
+		for (var i = 0; i < 2; i++) {
+			for (var j = 0; j < arr.length; j++) {
+				var temp = {};
+				for (var att in arr[j]) {
+					temp[att] = arr[j][att];
+				}
+				newArr1.push(temp);
+			}
+		}
+		for (var j = 0; j < 36; j++) {
+			var t = Math.floor(newArr1.length*Math.random());
+			newArr.push(newArr1[t]);
+			newArr1.splice(t,1);
+		}
+		
+	}
+	
+	
+	sum();
+	function drawSum(step){
+		var rows = 0;
+		var clos = 0;
+
+		for (var i = 0; i < newArr.length; i++) {
+			if(i%step==0){
+				rows++;
+				clos = 0;
+			}
+
+			cobj.beginPath();
+			cobj.fillStyle = newArr[i].color;
+			cobj.rect(clos*(newArr[i].width+10)+50,rows*(newArr[i].height+10),newArr[i].width,newArr[i].height);
+			cobj.fill();
+			newArr[i].x = clos*(newArr[i].width+10)+10;
+			newArr[i].y = rows*(newArr[i].height+10);
+			clos++;
+		}
+	}
+
+	drawSum(6);
+
+
+	var arrTemp = [];
+	var numArr = [];
+	var winNum = 0;
+	canvas.onclick = function(e){
+		var mx = e.layerX;
+		var my = e.layerY;
+		
+		newDraw();
+		function newDraw(){
+			cobj.clearRect(0,0,500,500);
+			for (var i = 0; i < newArr.length; i++) {
+				cobj.fillStyle = newArr[i].color;
+				var str = newArr[i].x+","+newArr[i].y+","+newArr[i].width+","+newArr[i].height;
+				var event = new addEvent(cobj,"rect",str,function(){
+					numArr.push(i);
+					arrTemp.push(newArr[i]);
+					cobj.strokeStyle = "red";
+					cobj.stroke();
+					if(arrTemp.length == 2){
+						if(arrTemp[0].color==arrTemp[1].color&&numArr[0]!=numArr[1]){
+							arrTemp[0].color = "rgba(0,0,0,0)";
+							arrTemp[1].color = "rgba(0,0,0,0)";
+							arrTemp = [];
+							numArr = [];
+							newDraw();
+							winNum++;
+							if(winNum==newArr.length/2){
+								location.reload();
+							}
+						}
+						arrTemp.splice(0,1);
+						numArr.splice(0,1);
+					}
+				})
+				event.add(mx,my);
+			}
+		}
+	}
+
+
+
+	function addEvent(cobj,type,data,callback){
+			this.cobj = cobj;
+			this.type = type;
+			this.data = data;
+			this.callback = callback;
+			this.redraw();
+		}
+
+		addEvent.prototype = {
+			redraw : function(){
+				if(this.type == "arc"){
+					this.cobj.beginPath();
+					var arr = this.data.split(",");
+					this.cobj.arc(arr[0],arr[1],arr[2],arr[3],arr[4]);
+					this.cobj.fill();
+				}
+				if(this.type == "rect"){
+					this.cobj.beginPath();
+					var arr = this.data.split(",");
+					this.cobj.rect(arr[0],arr[1],arr[2],arr[3]);
+					this.cobj.fill();
+				}
+			},
+			add:function(mx,my){
+				if(this.cobj.isPointInPath(mx,my)){
+					this.callback();
+				}
+			}
+		};
+
+
+</script>
+</html>
