@@ -72,7 +72,7 @@
 			cobj.fillStyle = newArr[i].color;
 			cobj.rect(clos*(newArr[i].width+10)+50,rows*(newArr[i].height+10),newArr[i].width,newArr[i].height);
 			cobj.fill();
-			newArr[i].x = clos*(newArr[i].width+10)+10;
+			newArr[i].x = clos*(newArr[i].width+10)+50;
 			newArr[i].y = rows*(newArr[i].height+10);
 			clos++;
 		}
@@ -101,8 +101,8 @@
 					cobj.stroke();
 					if(arrTemp.length == 2){
 						if(arrTemp[0].color==arrTemp[1].color&&numArr[0]!=numArr[1]){
-							arrTemp[0].color = "rgba(0,0,0,0)";
-							arrTemp[1].color = "rgba(0,0,0,0)";
+							arrTemp[0].color = "rgba(+"+parseInt(255*Math.random())+","+parseInt(255*Math.random())+","+parseInt(255*Math.random())+",0)";
+							arrTemp[1].color = "rgba(+"+parseInt(255*Math.random())+","+parseInt(255*Math.random())+","+parseInt(255*Math.random())+",0)";
 							arrTemp = [];
 							numArr = [];
 							newDraw();

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet">
+</head>
+<style type="text/css">
+	.console{
+		margin :10px 10px;
+		border:2px solid #804040;
+		width: 250px;
+		height: 705px;
+		background-color: #ccc;
+		float:left;
+		font-size: 25px;
+		text-align: center;
+	}
+	.wrapper{
+		margin :10px 10px;
+		border:2px solid #804040;
+		float:left;
+		height: 705px;
+	}
+	.commanderPanel{
+		margin: 5px 10px; 
+	}
+	.spaceship{
+		margin: 5px 5px; 
+	}
+	span{
+		background-color: #C4E1FF;
+		border:1px solid #00E3E3;
+		border-radius:3px;
+		margin: 2px 3px; 
+		color:#999;
+	}
+	span:hover{
+		color:#000;
+	}
+	#context{
+		font-size: 15px;
+		text-align: left;
+		margin-left: 5px;
+		height: 670px;
+		overflow: scroll;
+	}
+</style>
+<body style="background-color: #696969">
+	<div class="container">
+		<div class="console">
+			Console log
+			<div id="context">
+				
+			</div>
+		</div>
+		<div class="wrapper" >
+			<canvas id = "canvas" width="600" height="600" style="background-color: #C7C7E2"></canvas>
+			<div class="commanderPanel">
+				<div class="spaceship">
+					spaceship No.1:
+					<span>launch</span>
+					<span>fly</span>
+					<span>stop</span>
+					<span>destroy</span>
+				</div>
+				<div class="spaceship">
+					spaceship No.2:
+					<span>launch</span>
+					<span>fly</span>
+					<span>stop</span>
+					<span>destroy</span>
+				</div>
+				<div class="spaceship">
+					spaceship No.3:
+					<span>launch</span>
+					<span>fly</span>
+					<span>stop</span>
+					<span>destroy</span>
+				</div>
+				<div class="spaceship">
+					spaceship No.4:
+					<span>launch</span>
+					<span>fly</span>
+					<span>stop</span>
+					<span>destroy</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+	
+	var canvas = document.getElementById("canvas");
+	var cobj = canvas.getContext("2d");
+	var rocketArr = [];
+	var imgPlanet = new Image();
+	imgPlanet.src = "img/planet.png";
+	var imgRocket = new Image();
+	imgRocket.src = "img/min-rocket.png";
+	var span =document.getElementsByTagName("span");
+	var timer;
+	var context = document.getElementById("context");
+
+	//建立火箭
+	for (var i = 0; i < 4; i++) {
+		var rocketObj = {
+			angle:0,
+			x:365+i*60,
+			y:280,
+			oil:40,
+			oilx:410+i*60,
+			oily:325,
+			
+		};
+		rocketArr.push(rocketObj);
+	}
+
+	//綁定按鈕
+	for (var i = 0; i < 4; i++) {
+		span[i*4+0].addEventListener("click", function(i){
+			return function(){
+				
+				
+			}
+		}(i));
+
+
+		span[i*4+1].addEventListener("click", function(i){
+			return function(){
+				
+			}
+		}(i));
+
+
+		span[i*4+2].addEventListener("click", function(i){
+			return function(){
+				
+			}
+		}(i));
+
+
+		span[i*4+3].addEventListener("click", function(i){
+			return function(){
+				
+			}
+		}(i));
+
+	}
+
+	//起始畫面
+	window.onload = function() {
+		cobj.drawImage(imgPlanet,250,250,100,100);
+		drawLocus();
+	}
+
+
+	//畫火箭狀態
+
+	//畫軌跡
+	function drawLocus(){
+		for (var i = 0; i < 4; i++) {
+			cobj.beginPath();
+			cobj.strokeStyle = "#9999CC";
+			cobj.arc(300,300,90+i*60,0,2*Math.PI);
+			cobj.stroke();
+		}
+	}
+	
+
+</script>
+</html>
