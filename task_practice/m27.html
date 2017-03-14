@@ -10,7 +10,7 @@
 		margin :10px 10px;
 		border:2px solid #804040;
 		width: 250px;
-		height: 705px;
+		height: 725px;
 		background-color: #ccc;
 		float:left;
 		font-size: 25px;
@@ -20,19 +20,20 @@
 		margin :10px 10px;
 		border:2px solid #804040;
 		float:left;
-		height: 705px;
+		height: 725px;
 	}
 	.commanderPanel{
 		margin: 5px 10px; 
 	}
 	.spaceship{
 		margin: 5px 5px; 
+		font-size: 20px;
 	}
 	span{
 		background-color: #C4E1FF;
 		border:1px solid #00E3E3;
 		border-radius:3px;
-		margin: 2px 3px; 
+		margin: 2px 8px; 
 		color:#999;
 	}
 	span:hover{
@@ -42,8 +43,36 @@
 		font-size: 15px;
 		text-align: left;
 		margin-left: 5px;
-		height: 670px;
+		height: 696px;
 		overflow: scroll;
+	}
+	.choose{
+		padding: 15px 22px;
+		border:1px solid #005a5a;
+		height: 130px;
+		width: 200px;
+		position: absolute;
+		top:40%;
+		left:20%;
+		background-color: #ccc;
+		font-size: 22px;
+		
+	}
+	label {
+		font-size: 18px;
+	}
+	.modal {
+	    display: none; /* Hidden by default */
+	    position: fixed; /* Stay in place */
+	    z-index: 1; /* Sit on top */
+	    padding-top: 100px; /* Location of the box */
+	    left: 0;
+	    top: 0;
+	    width: 100%; /* Full width */
+	    height: 100%; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
 	}
 </style>
 <body style="background-color: #696969">
@@ -54,6 +83,7 @@
 				
 			</div>
 		</div>
+
 		<div class="wrapper" >
 			<canvas id = "canvas" width="600" height="600" style="background-color: #C7C7E2"></canvas>
 			<div class="commanderPanel">
@@ -87,7 +117,27 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
+	<div id="myModal" class="modal">
+		<div class="choose" id="choose">
+			<div class="speedMode">
+				Spaceship flight speed <br>
+				<input type="radio" name="speed" value=1 onclick="speedCheck(this.value)" checked><label>slow</label> 
+				<input type="radio" name="speed" value=3 onclick="speedCheck(this.value)"><label>medium</label> 
+				<input type="radio" name="speed" value=9 onclick="speedCheck(this.value)"><label>fast</label> 
+			</div>
+			<div class="chargeMode">
+				Spaceship charge rate <br>
+				<input type="radio" name="charge" value=0.06 checked onclick="chargeCheck(this.value)"><label>slow</label> 
+				<input type="radio" name="charge" value=0.2 onclick="chargeCheck(this.value)"><label>medium</label> 
+				<input type="radio" name="charge" value=1 onclick="chargeCheck(this.value)"><label>fast</label> 
+			</div>
+			<button >Confirm</button>
+			<button >Cancel</button>
+		</div>
+	</div>
+	
 </body>
 
 <script type="text/javascript">
@@ -102,6 +152,11 @@
 	var span =document.getElementsByTagName("span");
 	var timer;
 	var context = document.getElementById("context");
+	var btn =document.getElementsByTagName("button");
+	var modal = document.getElementById('myModal');
+	var nowid;
+	var speedMode = 1;
+	var chargeMode = 0.1;
 
 	//建立火箭
 	for (var i = 0; i < 4; i++) {
@@ -116,40 +171,154 @@
 		};
 		rocketArr.push(rocketObj);
 	}
+	
+	
+	//建立介質
+	var BUS = {
+		lostRate : 0.1,
+		teleTime : 300,
+		send : (command,num) => {
+				if (BUS.lost()) {
+					setTimeout(()=>{
+						commander.consoleLog('Send success !');
+						commander.consoleLog('Send Message : ' + command);
+						commander.command(command,num);
+					}, BUS.teleTime);		
+				}
+				else {
+					setTimeout(()=>{
+						commander.consoleLog('Send fail , still try ...');
+						BUS.send(command,num);
+					}, BUS.teleTime);
+				}
+		},
+		lost : () =>{
+			return Math.random() > BUS.lostRate ; 
+		}
+	}
+
+	var commander = {
+		consoleLog : function(text){
+			var p=document.createElement("p");
+			p.innerHTML = text;
+			context.insertBefore(p,context.childNodes[0]);
+		},
+		command : function(command,num){
+			switch (command) {
+				case "launch":
+					rocketArr[num].action = "stop";
+					rocketArr[num].destroy = false;
+					rocketArr[num].speedMode = speedMode;
+					rocketArr[num].chargeMode = chargeMode;
+					drawLocus();
+					status();	
+				break;
+
+				case "fly":
+					if(rocketArr[num].exist == "false" || !rocketArr[num].exist){
+						commander.consoleLog("Spaceship No."+ num +" is not exists");
+					}
+					else if(rocketArr[num].action == "fly"){
+						commander.consoleLog("Spaceship No."+ num +" is flying");
+					}else{
+						rocketArr[num].action = "fly";
+						clearInterval(timer);
+						timer = setInterval(function(){
+							cobj.clearRect(-300,-300,900,900);
+							cobj.drawImage(imgPlanet,250,250,100,100);
+							drawLocus();
+							status();
+						},10);
+					}
+				break;
+
+
+				case "stop":
+					if(rocketArr[num].exist == "false" || !rocketArr[num].exist){
+						commander.consoleLog("Spaceship No."+ num +" is not exists");
+					}
+					else if(rocketArr[num].action == "stop"){
+						commander.consoleLog("Spaceship No."+ num +" already stop");
+					}
+					else if(rocketArr[num].exist == "true"){
+						rocketArr[num].action = "stop";
+					}
+				break;
+
+				case "destroy":
+					if(rocketArr[num].exist == "false" || !rocketArr[num].exist){
+						commander.consoleLog("Spaceship No."+ num +" is not exists");
+					}else{
+						rocketArr[num].destroy = true;
+						rocketArr[num].angle=0;
+						rocketArr[num].x=365+num*60;
+						rocketArr[num].y=280;
+						rocketArr[num].oil=40;
+						rocketArr[num].oilx=410+num*60;
+						rocketArr[num].oily=325;
+						rocketArr[num].exist = "false";
+					}
+					
+				break;
+
+
+				default:
+				break;
+			}
+		},
+
+	}
 
 	//綁定按鈕
 	for (var i = 0; i < 4; i++) {
 		span[i*4+0].addEventListener("click", function(i){
 			return function(){
-				
-				
+				if(rocketArr[i].exist == "true"){
+					commander.consoleLog("Spaceship No."+ i +" already exists");
+				}else{
+					modal.style.display = "block";
+					nowid = i;
+					
+				}		
 			}
 		}(i));
 
 
 		span[i*4+1].addEventListener("click", function(i){
 			return function(){
-				
+				BUS.send("fly",i);
 			}
 		}(i));
 
 
 		span[i*4+2].addEventListener("click", function(i){
 			return function(){
-				
+				BUS.send("stop",i);
 			}
 		}(i));
 
 
 		span[i*4+3].addEventListener("click", function(i){
 			return function(){
-				
+				BUS.send("destroy",i);
 			}
 		}(i));
 
 	}
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
+	    }
+	}
+    btn[0].onclick = function(){
+    	BUS.send("launch",nowid);
+    	modal.style.display = "none";
+    }
+    btn[1].onclick = function(){
+    	modal.style.display = "none";
+    }
 
-	//起始畫面
+    //起始畫面
 	window.onload = function() {
 		cobj.drawImage(imgPlanet,250,250,100,100);
 		drawLocus();
@@ -157,6 +326,53 @@
 
 
 	//畫火箭狀態
+	function status(){
+		for (var i = 0; i < rocketArr.length; i++) {
+			if(rocketArr[i].destroy){
+				continue;
+			}
+			else if(rocketArr[i].action == "stop" ){
+				rocketArr[i].exist = "true";
+				cobj.save();
+				cobj.translate(300,300);
+				cobj.rotate(rocketArr[i].angle*Math.PI/180);
+				cobj.drawImage(imgRocket,rocketArr[i].x-300,rocketArr[i].y-300,50,50);
+
+				cobj.beginPath();
+				cobj.strokeStyle = "rgb("+(parseInt(255-rocketArr[i].oil*255/40))+","+(parseInt(rocketArr[i].oil*0.6*255/40))+","+0+")";
+				cobj.lineWidth = 5;
+				cobj.moveTo(rocketArr[i].oilx-300,rocketArr[i].oily-300);
+				cobj.lineTo(rocketArr[i].oilx-300,rocketArr[i].oily-rocketArr[i].oil-300);
+				cobj.stroke();
+
+
+				cobj.restore();
+				if(rocketArr[i].oil<40) rocketArr[i].oil+=rocketArr[i].chargeMode;
+			}
+			else if(rocketArr[i].action == "fly" && rocketArr[i].exist){
+
+				cobj.save();
+				cobj.translate(300,300);
+				cobj.rotate(rocketArr[i].angle*Math.PI/180);
+				cobj.drawImage(imgRocket,rocketArr[i].x-300,rocketArr[i].y-300,50,50);
+
+				cobj.beginPath();
+				cobj.strokeStyle = "rgb("+(parseInt(255-rocketArr[i].oil*255/40))+","+(parseInt(rocketArr[i].oil*0.6*255/40))+","+0+")";
+				cobj.lineWidth = 5;
+				cobj.moveTo(rocketArr[i].oilx-300,rocketArr[i].oily-300);
+				cobj.lineTo(rocketArr[i].oilx-300,rocketArr[i].oily-rocketArr[i].oil-300);
+				cobj.stroke();
+
+
+				cobj.restore();
+
+				if(rocketArr[i].angle%27==0) rocketArr[i].oil--;
+				rocketArr[i].angle-=rocketArr[i].speedMode;
+				if(rocketArr[i].oil<0) rocketArr[i].action = "stop";
+			}
+		}
+	}
+
 
 	//畫軌跡
 	function drawLocus(){
@@ -168,6 +384,13 @@
 		}
 	}
 	
+	//
+	function speedCheck(browser){
+		speedMode=parseInt(browser);
+	}
+	function chargeCheck(browser){
+		chargeMode=parseFloat(browser);
+	}
 
 </script>
 </html>
