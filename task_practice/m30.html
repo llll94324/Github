@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" >
+	<style type="text/css">
+		input {
+			margin-left: 15px;
+		}
+		label {
+			float: left;
+			text-align: right; 
+			width: 20%;
+		}
+		p{
+			margin-left: 21%;
+			color: #777;
+		}
+		button {
+			margin-left: 25%;
+			background-color: #2563AD;
+			color: #fff;
+			height: 40px;
+			width: 90px;
+			font-size: 24px;
+			border: none;
+			border-radius: 5px;
+		}
+	</style>
+</head>
+<body style="background-color: #ccc">
+	<form action="">
+		<label>Name : </label>
+		<input type="text">
+		<p></p>
+		<label>Password : </label>
+		<input type="password">
+		<p></p>
+		<label>Confirm password : </label>
+		<input type="password">
+		<p></p>
+		<label>E-mail : </label>
+		<input type="text">
+		<p></p>
+		<label>Cell phone : </label>
+		<input type="text">
+		<p></p>
+	</form>
+	<button id = "button">submit</button>
+</body>
+
+<script type="text/javascript">
+	var input = document.getElementsByTagName('input');
+	var p = document.getElementsByTagName('p');
+	var button = document.getElementById('button');
+	var submitCheck = {
+		input0 : false ,
+		input1 : false ,
+		input2 : false ,
+		input3 : false ,
+		input4 : false
+	}
+
+	function validFn(fn,elementP,elementInput){
+		if(fn.check){
+			elementP.innerHTML = fn.right;
+			elementP.style.color = 'green';
+			elementInput.style.color = 'green';
+			elementInput.style.border = '1px solid green';
+			return true;
+		}else{
+			elementP.innerHTML = fn.error;
+			elementP.style.color = 'red';
+			elementInput.style.color = 'red';
+			elementInput.style.border = '1px solid red';
+			return false;
+		}
+	}
+
+	function countLength(str) {
+		var inputLength = 0;
+		for (var i = 0; i < str.length; i++) {
+			var countCode = str.charCodeAt(i);
+			if (countCode >= 0 && countCode <=128) {
+				inputLength += 1;
+			} else {
+				inputLength += 2;
+			}
+		}
+		return inputLength;
+	}
+
+	function checkName(name){
+		if (countLength(name) == 0) {
+			return {check:false , error : '名稱不能空白'};
+		} 
+		else if (countLength(name) >=4 && countLength(name) <= 16) {
+			return {check:true , right:'格式正確'};
+		} 
+		else {
+			return {check: false , error : '請輸入4~16個字元'};
+		}
+	}
+
+	function password(password){
+		if (countLength(password) == 0) {
+			return {check:false , error : '密碼不能空白'};
+		} 
+		else if (countLength(password) >=4 && countLength(password) <= 16) {
+			return {check:true , right:'格式正確'};
+		} 
+		else {
+			return {check: false , error : '請輸入4~16個字元'};
+		}
+	}
+
+	function checkPassword (password,checkPassword) {
+		if (password == checkPassword) {
+			if (checkPassword == 0) {
+				return {check: false , error : '此欄位不能空白'};
+			}
+			return {check: true , right:'密碼一致'};
+		}
+		else {
+			return {check: false , error : '密碼不一致'};
+		}
+	}
+
+
+	function checkEmail (email) {
+		var emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+		if(email.search(emailRule)!= -1){
+		    return {check: true , right:'格式正確'};
+		}
+		else{
+		    return {check: false , error : '請參略格式xxx@xxx.xxx'};
+		}
+	}
+
+	function checkPhonenumber (phonenumber) {
+		var phonenumberRule = /09\d{2}-\d{6}/;
+		if(phonenumber.search(phonenumberRule)!= -1){
+		    return {check: true , right:'格式正確'};
+		}
+		else{
+		    return {check: false , error : '請參略格式09xx-123456'};
+		}
+	}
+
+
+	input[0].addEventListener('keyup' , ()=>{
+		submitCheck.input0 = validFn(checkName(input[0].value),p[0],input[0]);
+	});
+	input[0].addEventListener('click' , ()=>{
+		p[0].innerHTML = '請輸入4~16個字元';
+	});
+
+	input[1].addEventListener('keyup' , ()=>{
+		input[1].value = input[1].value.replace(/[^-_\w]/g,'');
+		submitCheck.input1 = validFn(password(input[1].value),p[1],input[1]);
+	});
+	input[1].addEventListener('click' , ()=>{
+		p[1].innerHTML = '請輸入4~16個英文或數字';
+	});
+
+	input[2].addEventListener('keyup' , ()=>{
+		input[2].value = input[2].value.replace(/[^-_\w]/g,'');
+		submitCheck.input2 = validFn(checkPassword(input[1].value,input[2].value),p[2],input[2]);
+	});
+	input[2].addEventListener('click' , ()=>{
+		p[2].innerHTML = '請輸入4~16個英文或數字';
+	});
+
+	input[3].addEventListener('keyup' , ()=>{
+		submitCheck.input3 = validFn(checkEmail(input[3].value),p[3],input[3]);
+	});
+	input[3].addEventListener('click' , ()=>{
+		p[3].innerHTML = '請參略格式xxx@xxx.xxx';
+	});
+
+	input[4].addEventListener('keyup' , ()=>{
+		submitCheck.input4 = validFn(checkPhonenumber(input[4].value),p[4],input[4]);
+	});
+	input[4].addEventListener('click' , ()=>{
+		p[4].innerHTML = '請參略格式09xx-123456';
+	});
+
+	button.addEventListener('click', ()=>{
+		for (inputs in submitCheck) {
+			if (!submitCheck[inputs]) {
+				alert('提交失敗，請完整填寫');
+				return;
+			}
+		}
+
+		alert ('提交成功');
+	});
+	
+</script>
+</html>

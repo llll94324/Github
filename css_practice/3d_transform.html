@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3d_practice</title>
+	<style>
+		.out{
+			width: 150px;
+			height: 150px;
+			padding: 150px;
+			border: 1px solid red;
+			margin: 0 auto;
+			perspective: 500px;
+			position: relative;
+		}
+		.box{
+			width: 150px;
+			height: 150px;
+			transform-style: preserve-3d;
+		}
+		ul,li,dl,dd{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			position: relative;
+		}
+		.box li{
+			width: 150px;
+			height: 150px;
+			position: absolute;
+			line-height: 150px;
+			text-align: center;
+			font-size: 25px;
+
+		}
+		.box li:nth-of-type(1){
+			background: red;top:-150px;left: 0px;
+			transform: rotateX(-90deg); transform-origin: bottom;
+		}
+		.box li:nth-of-type(2){
+			background: pink;top:0px;left: -150px;
+			transform: rotateY(90deg); transform-origin: right;
+
+		}
+		.box li:nth-of-type(3){
+			background: green;top:0px;left: 0px;
+		}
+		.box li:nth-of-type(4){
+			background: yellow;top:0px;left: 150px;
+			transform: rotateY(-90deg); transform-origin: left;
+		}
+		.box li:nth-of-type(5){
+			background: blue;top:150px;left: 0px;
+			transform: rotateX(90deg); transform-origin: top;
+		}
+		.box li:nth-of-type(6){
+			background: orange;top:0px;left: 0px;
+			transform: translateZ(150px);
+		}
+
+		.btns{
+			position: absolute;
+			width: 250px;
+			height:30px;
+			left: 112px;
+			top: 360px;
+		}
+		.btns dd{
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			box-shadow: 1px 1px 2px #111;
+			float: left;
+			margin-right: 15px;
+			cursor: pointer;
+			background: #fff;
+		}
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<div class="out">
+		<ul class="box">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+		</ul>
+		<dl class="btns">
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+			<dd></dd>
+		</dl>
+	</div>
+</body>
+<script>
+	var box = document.getElementsByTagName("ul")[0];
+	var btns = document.getElementsByTagName("dd");
+	setCSS3(box,{"transform-origin":"50% 50% 75px"});
+
+	
+	
+	var num = 0;
+/*
+	setInterval(function(){
+		num++;
+		if(num==4){
+			num = 0;
+		}
+		changeAngle(box,(num-1)*90,num*90);
+	},1000)*/
+
+
+	for (var i = 0; i < btns.length; i++) {
+		btns[i].index = i;
+		btns[i].onclick = function(){	
+			for (var j = 0; j < btns.length; j++) {
+				btns[j].style.backgroundColor = "#fff";
+			}
+			this.style.backgroundColor = "#540022";
+			changeAngle(box,(this.index-1)*90,this.index*90,"Y");
+			if(this.index>3)changeAngle(box,(this.index-1)*90,this.index*90,"X");
+		}
+	}
+
+
+	function changeAngle(obj,startA,endA,axis){
+		clearInterval(obj.t);
+		obj.t = setInterval(function(){
+			
+			if(startA>=endA){
+				clearInterval(obj.t);
+			}else{
+				var speed = (endA-startA)*0.04;
+				speed = speed<0?Math.floor(speed):Math.ceil(speed);
+				startA += speed;
+				if(axis == "X")setCSS3(obj,{transform:"rotateX("+(startA+speed)+"deg)"});
+				if(axis == "Y")setCSS3(obj,{transform:"rotateY("+(startA+speed)+"deg)"});
+				
+			}		
+		},20);
+	}
+
+	function setCSS3 (obj,attrObj) {
+		for (i in attrObj) {
+			var newi = i;
+			if(newi.indexOf("-")>0){
+				var num = newi.indexOf("-");
+				newi.replace(newi.substr(num,2),newi.substr(num+1,1).toUpperCase())
+			}
+			obj.style[newi] = attrObj[i];
+			newi = newi.replace(newi.charAt(0),newi.charAt(0).toUpperCase())
+		 	obj.style["webkit"+newi] = attrObj[i];
+		 } 
+	}
+</script>
+</html>
