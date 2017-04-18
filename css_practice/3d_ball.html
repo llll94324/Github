@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		body{
+			margin: 0;padding: 0;
+		}
+		ul,li{
+			list-style: none;margin: 0;padding: 0;
+		}
+		.scene{
+			width: 500px;height: 500px;
+			margin: 10px auto;
+			position: relative;
+			border: 1px solid red;
+			perspective: 1000px;
+		}
+		.out{
+			width: 100%;height: 100%;
+			position: relative;
+			transform: translateZ(-100px);
+		}
+		.ball{
+			width: 100%;height: 100%;
+			position: relative;
+			transform-style: preserve-3d;
+		}
+		.ball li{
+			width: 80px;height: 50px;
+			padding: 3px;
+			background: rgba(32,163,115,1);
+			position: absolute;
+			border-radius: 10%;
+			box-shadow: 0 0 15px #41cd9a;
+			border: 1px solid #238a64;
+			background-clip: content-box;
+			text-align: center;line-height: 50px;color: #fff;text-shadow: 1px 1px 4px #000;
+			font-family: 微軟雅黑;font-size: 20px;
+			transform-origin: left;
+		}
+	</style>
+</head>
+<body style="background-color: #000">
+	<div class="scene">
+		<div class="out">
+			<ul class="ball">
+				
+			</ul>
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript" src = "3d_tool.js"></script>
+<script>
+	
+	var radius = 200;
+	var ball = document.getElementsByClassName("ball")[0];
+	var out = document.getElementsByClassName("out")[0];
+	var scene = document.getElementsByClassName("scene")[0];
+	
+	window.onload = function(){
+		
+		var balls = new drawBall();
+		balls.draw();
+		for (var i = 0; i < balls.length; i++) {
+			ball.appendChild(balls.all[i]);
+		}
+
+		
+
+	}
+
+	var maths = new math();
+	var angle = 1;
+
+	function moves(){
+		if(angle>1){
+			angle*=0.95
+		}else{
+			angle=1;
+		}
+		maths.theta += angle;
+		maths.rotates();
+		var arr = maths.arr;
+		setCSS3(ball,{transform:"matrix3d("+arr[0]+","+arr[1]+","+arr[2]+","+arr[3]+","+arr[4]+","+arr[5]+","+arr[6]+","+arr[7]+","+arr[8]+","+arr[9]+","+arr[10]+","+arr[11]+","+arr[12]+","+arr[13]+","+arr[14]+","+arr[15]+")"});
+	};
+
+	
+	var t = setInterval(moves,30);
+
+
+	var startz = -100;
+	var step = 30;
+	mouseScroll (scene,function(){
+		startz+=step;
+		setCSS3(out,{transform:"translateZ("+startz+"px)"});
+	},function(){
+		startz-=step;
+		setCSS3(out,{transform:"translateZ("+startz+"px)"});
+	});
+	
+	document.onmousedown = function(e){
+		clearInterval(t);
+		var ev = e||window.event;
+		var lx = ev.clientX-scene.offsetLeft-250;
+		var ly = ev.clientY-scene.offsetTop-250;
+		var end;
+
+		document.onmousemove = function(e){
+			var ev = e||window.event;
+			var cx = ev.clientX-scene.offsetLeft-250;
+			var cy = ev.clientY-scene.offsetTop-250;
+			end = Math.sqrt((cx-lx)*(cx-lx) + (cy-ly)*(cy-ly));
+			angle = end/5;
+			lx= cx;
+			ly=cy;
+
+			maths.mouse = [cx,cy,0];
+			maths.theta += angle;
+			maths.rotates();
+			var arr = maths.arr;
+			setCSS3(ball,{transform:"matrix3d("+arr[0]+","+arr[1]+","+arr[2]+","+arr[3]+","+arr[4]+","+arr[5]+","+arr[6]+","+arr[7]+","+arr[8]+","+arr[9]+","+arr[10]+","+arr[11]+","+arr[12]+","+arr[13]+","+arr[14]+","+arr[15]+")"});
+
+		}
+		document.onmouseup = function(e){
+			var ev = e||window.event;
+			var ox = ev.clientX-scene.offsetLeft-250;
+			var oy = ev.clientY-scene.offsetTop-250;
+
+			document.onmousemove = null;
+			document.onmouseup = null;
+
+			maths.mouse = [ox,oy,0];
+			angle = end;
+			t = setInterval(moves,30);
+		}
+	}
+
+	
+
+	function setCSS3 (obj,attrObj) {
+		for (i in attrObj) {
+			var newi = i;
+			if(newi.indexOf("-")>0){
+				var num = newi.indexOf("-");
+				newi.replace(newi.substr(num,2),newi.substr(num+1,1).toUpperCase())
+			}
+			obj.style[newi] = attrObj[i];
+			newi = newi.replace(newi.charAt(0),newi.charAt(0).toUpperCase())
+		 	obj.style["webkit"+newi] = attrObj[i];
+		 } 
+	}
+
+	function drawBall(){
+		this.radius = 250;
+		this.angles = [];
+		this.length = 25;
+		this.all = [];
+		this.text = ["html5","css3","php","mysql","javascript","flash","hdphp","ascript",".net","node","ruby","jquery","go","C++","Java","python","C","C#","R","Matlab","Perl","VB","Swift","Oracle"];
+
+	}
+	drawBall.prototype = {
+		angle:function(){
+			var num = 0;
+			for (var i = 0; i < this.length; i++) {
+				var obj = {};
+				if(i==0){
+					obj.theta = 0;
+					obj.phi = 0;
+				}
+				if(i>0&&i<4){
+					obj.theta = Math.PI/6*1;
+					obj.phi = Math.PI/3*2*num;
+					num++;
+				}
+				if(i>0&&i<4){
+					obj.theta = Math.PI/6*1;
+					obj.phi = Math.PI/3*2*num;
+					num++;
+				}
+				if(i>3&&i<9){
+					obj.theta = Math.PI/6*2;
+					obj.phi = Math.PI/5*2*num;
+					num++;
+				}
+				if(i>8&&i<16){
+					obj.theta = Math.PI/6*3;
+					obj.phi = Math.PI/7*2*num;
+					num++;
+				}
+				if(i>15&&i<21){
+					obj.theta = Math.PI/6*4;
+					obj.phi = Math.PI/5*2*num;
+					num++;
+				}
+				if(i>20&&i<24){
+					obj.theta = Math.PI/6*5;
+					obj.phi = Math.PI/3*2*num;
+					num++;
+				}
+				if(i>23){
+					obj.theta = Math.PI;
+					obj.phi = 0;
+				}
+				this.angles.push(obj);
+			}
+		},
+		draw:function(){
+			this.angle();
+			var radius = this.radius;
+			for (var i = 0; i < this.length; i++) {
+				var theta = this.angles[i].theta;
+				var phi = this.angles[i].phi;
+				var z = radius*Math.sin(theta)*Math.cos(phi);
+				var x = radius*Math.sin(theta)*Math.sin(phi)+250;
+				var y = radius*Math.cos(theta)+250;
+				var li = document.createElement("li");
+				li.style.cssText = "left:"+x+"px;top:"+y+"px;";
+				li.innerHTML = this.text[i];
+				
+				setCSS3(li,{transform:"translateZ("+z+"px) rotateY("+phi+"rad) rotateX("+(theta-Math.PI/2)+"rad) "});
+				this.all.push(li);
+				
+				
+				
+			}
+		}
+	}
+	
+
+</script>
+</html>
