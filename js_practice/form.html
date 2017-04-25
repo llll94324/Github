@@ -9,24 +9,44 @@
 	</style>
 </head>
 <body style="background-color: #c6c6c6">
-	<form name="myform" id="form1" action="" method="post">
+	<form name="myform" id="form1" action="" method="post" onsubmit="return check(this)">
 		Name:<input type="text" name="name"></br>
 		Age:<input type="text" name="age"></br>
 		Sex:<input type="radio" name="sex" value="man">man<input type="radio" name="sex" value="woman">woman</br>
-		Like:<input type="checkbox" name="like[]" value="play">play
-			 <input type="checkbox" name="like[]" value="run">run
-			 <input type="checkbox" name="like[]" value="study">study</br>
+		Like:<input type="checkbox" name="like" value="play">play
+			 <input type="checkbox" name="like" value="run">run
+			 <input type="checkbox" name="like" value="study">study</br>
 		School:<select name="school">
 			<option>北大</option>
 			<option>清大</option>
 			<option>東大</option>
 		</select></br>
-		Introduction:<textarea cols="60" rows="10" name="info"></textarea>
-
+		Introduction:<textarea cols="60" rows="10" name="info"></textarea></br>
+		<input type="submit" name="" value="Send">
 	</form>
 
 </body>
 <script>
-
+	function check (obj) {
+		// body... 
+		if(obj.name.value ==""){
+			alert("Name wrong");
+			return false;
+		}
+		if(obj.age.value ==""){
+			alert("Age wrong");
+			return false;
+		}
+		var sex_s = 0;
+		for (var i = 0; i < obj.sex.length; i++) {
+			if(obj.sex[i].checked){
+			sex_s = 1;
+			}
+		}
+		if(!sex_s){
+			alert("Sex wrong");
+			return false;
+		}
+	}
 </script>
 </html>
