@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src = 'https://code.jquery.com/jquery-3.2.1.min.js'></script>
+	<style>
+
+
+		#main .pin{
+			width: 225px;
+			height: auto;
+			padding: 15px 0px 0px 15px;
+			float: left;
+			
+		}
+		#main .pin .box{
+			width: 205px;
+			height: auto;
+			padding: 10px;
+			background: #fff;
+			border: 1px solid #ccc;
+			box-shadow: 0 0 6px #ccc;
+			border-radius: 5px;
+			z-index: -1;
+		}
+		#main .pin .box img{
+			width: 205px;
+		}
+
+	</style>
+
+</head>
+<body style="background-color: #202028">
+	<div id="main" style="position: relative;">		
+		<div class="pin">
+			<div class="box">
+				<img src="img/001.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/002.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/003.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/004.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/005.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/006.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/191.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/192.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/193.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/198.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/212.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/211.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/210.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/209.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/208.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/207.jpg">
+			</div>
+		</div>
+		<div class="pin">
+			<div class="box">
+				<img src="img/206.jpg">
+			</div>
+		</div>
+		
+	</div>
+
+</body>
+<script>
+	window.onload = function(){
+		waterfall('main','pin');
+		var data = [{src:'img/006.jpg'},
+					{src:'img/193.jpg'},
+					{src:'img/194.jpg'},
+					{src:'img/195.jpg'},
+					{src:'img/196.jpg'},
+					{src:'img/004.jpg'},
+					{src:'img/198.jpg'},
+					{src:'img/199.jpg'},
+					{src:'img/200.jpg'},
+					{src:'img/005.jpg'},]
+
+		var add = true;
+		window.onscroll = function(){
+			if(add){	
+				if(checkScrollSite()){
+					add = false;
+					loading();
+					setTimeout(function(){
+						var oParent = document.getElementById("main");
+						for (i in data) {
+						
+							var oPin = document.createElement("div");
+							oPin.className = 'pin';
+							oParent.appendChild(oPin);
+							var oBox = document.createElement('div');
+							oBox.className = 'box';
+							oPin.appendChild(oBox);
+							var oImg = document.createElement("img");
+
+							loadImg(data[i].src,callBack,oImg);
+					
+							oImg.src = data[i].src;
+							oBox.appendChild(oImg);
+							
+							
+
+						}
+						waterfall('main','pin');
+					
+						document.getElementById("main").removeChild(document.getElementById("loadImg"));
+						add = true;
+					},1000);
+				}
+			}
+		}
+	}
+
+	var startNum = 0;
+	function waterfall(parent,pin){
+
+		var oParent = document.getElementById(parent);
+		var aPin = getClassObj(oParent,pin);
+		var iPinW = aPin[0].offsetWidth;
+		var num = Math.floor(document.documentElement.clientWidth/iPinW);
+		oParent.style.cssText = 'width:'+num*iPinW+'px;margin: 0 auto;';
+
+		var compareArr = [];
+		for (var i = 0; i < aPin.length; i++) {
+			if(i<num){
+				compareArr[i] = aPin[i].offsetHeight;
+			}else {
+				
+				var minH = Math.min.apply({},compareArr);
+				var minKey = getMinKey(compareArr,minH);
+				aPin[i].style.position = 'absolute';
+					
+				
+				aPin[i].style.top = minH +'px';
+				aPin[i].style.left = aPin[minKey].offsetLeft + 'px';
+				if(i<=startNum){
+					startNum = startNum;
+				}else{
+					aPin[i].style.opacity = 0;
+					$(aPin[i]).stop().animate({
+						opacity : 1
+					},1000)
+					startNum = i;
+				}
+				compareArr[minKey] += aPin[i].offsetHeight;
+					
+			}
+		}
+	}
+
+	
+	
+
+	/*通過class選擇元素*/
+	function getClassObj (parent,className) {
+		var obj = document.getElementsByTagName("*");
+		var result = [];
+		for (var i = 0; i < obj.length; i++) {
+			if(obj[i].className == className){
+				result.push(obj[i]);
+			}
+		}
+		return result;
+	}
+
+	/*獲取數組最小值ㄉ鍵值*/
+	function getMinKey (arr,minH) {
+		for (key in arr) {
+			if(arr[key] == minH){
+				return key;
+			}
+		}
+
+	}
+
+	function checkScrollSite () {
+		var oParent = document.getElementById("main");
+		var aPin = getClassObj(oParent,'pin');
+		var lastPinH = aPin[aPin.length-1].offsetTop + Math.floor(aPin[aPin.length-1].offsetHeight/2);
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		var documentH = document.documentElement.clientHeight;
+		return lastPinH < (scrollTop + documentH) ? true : false;
+	
+
+	}
+
+	function loading() {
+		var oParent = document.getElementById('main');
+		var aPin = getClassObj(oParent,'pin');
+		var lastPinH = aPin[aPin.length-1].offsetTop + aPin[aPin.length-1].offsetHeight;
+		
+		var loadImg = document.createElement('img');
+
+		
+		loadImg.id = 'loadImg';
+		loadImg.src = 'img/load.gif';
+		loadImg.style.position = 'absolute';
+		loadImg.style.top = lastPinH + 20 + 'px';
+
+		loadImg.style.left = Math.floor((oParent.offsetWidth - 80)/2) + 'px';
+		loadImg.style.zIndex = '9999';
+		oParent.appendChild(loadImg);
+
+	}
+
+	function loadImg(url,fn,imgObj) {
+		var img = new Image();
+		img.src = url;
+		if(img.complete){
+			fn(img.offsetWidth,img.height,imgObj);
+		}else{
+			img.onload = function () {
+				fn(img.width,img.height,imgObj);
+			}
+		}
+	}
+ 	
+ 	function callBack(w,h,imgObj){
+ 		imgObj.style.width = 205 +'px';
+ 		var scale = w/205;
+ 		imgObj.style.height = Math.floor(h/scale) + 'px';
+ 	}
+
+
+	
+
+		
+	
+	
+</script>
+</html>

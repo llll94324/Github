@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+
+
+</body>
+<script>
+	function getSalary(fn) {
+		fn(30000);
+	}
+	function subTax (salary,fn) {
+		fn(salary*0.75);
+	}
+	function subRent (salary,fn) {
+		fn(salary-5000);
+	}
+	function result (fn) {
+		getSalary(function (salary) {
+			subTax(salary,function (salary) {
+				subRent(salary,function (salary) {
+					fn(salary);
+				});
+			});
+			
+		});
+	}
+	result(function (salary) {
+		console.log(salary);
+	})
+
+
+
+
+</script>
+</html>
