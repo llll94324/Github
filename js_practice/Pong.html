@@ -1,0 +1,220 @@
+<<!DOCTYPE html>
+<html>
+<head>
+	<title>Title</title>
+	<style type="text/css">
+		body{
+			align-content: center;
+			align-items: center;
+			display: flex;
+			margin: 20px;
+		}
+		canvas{
+			border: solid 1px #fff;
+			border-left: none;
+			border-right: none;
+			image-rendering: pixelated;
+			height: 90%;
+			margin: 0 auto; 
+		}
+	</style>
+</head>
+
+<body style='background: #202028'>
+
+	<canvas id="pong" width="600" height="400"></canvas>
+
+
+
+</body>
+
+<script>
+	class Vec{
+		constructor(x=0,y=0){
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	class Rect{
+		constructor(w,h){
+			this.pos = new Vec;
+			this.size = new Vec(w,h);
+		}
+		get left(){
+			return this.pos.x - this.size.x / 2;
+		}
+		get right(){
+			return this.pos.x + this.size.x / 2;
+		}
+		get top(){
+			return this.pos.y - this.size.y / 2;
+		}
+		get bottom(){
+			return this.pos.y + this.size.y / 2;
+		}
+	}
+
+	class Ball extends Rect{
+		constructor(){
+			super(10,10);
+			this.vel = new Vec;
+		}
+	}
+	class Player extends Rect{
+		constructor(){
+			super(20,100);
+			this.score = 0;
+		}
+	}
+
+
+
+	var canvas = document.getElementById('pong');
+	var context = canvas.getContext('2d');
+
+
+
+	var ball = new Ball;
+	var players = [new Player,new Player];
+	var charPixel = 10;
+	var chars = [
+	'111101101101111',
+	'010010010010010',
+	'111001111100111',
+	'111001111001111',
+	'101101111001001',
+	'111100111001111',
+	'100100111101111',
+	'111101001001001',
+	'111101111101111',
+	'111101111001111',
+	].map(function (str){
+		var canvas = document.createElement('canvas');
+		canvas.height = charPixel * 5;
+		canvas.width = charPixel * 3;
+		
+		var context = canvas.getContext('2d');
+		context.fillStyle = '#fff';
+		str.split('').forEach( function(fill, i) {
+			if(fill == '1'){
+				context.fillRect((i % 3) * charPixel,(i / 3 | 0) * charPixel,
+					charPixel,charPixel)
+			}
+
+		});
+		return canvas;
+
+	});
+
+	
+	var lastTime;
+	
+
+	players[0].pos.x = 40;
+	players[1].pos.x = canvas.width - 40;
+	players.forEach( function(player) {
+		player.pos.y = canvas.height / 2;
+	});
+
+	function callback(millis){
+		if(lastTime){
+			update((millis - lastTime) / 1000);
+		}
+		lastTime = millis;
+		requestAnimationFrame(callback);
+
+	}
+
+
+	function update(dt){
+		ball.pos.x += ball.vel.x *dt;
+		ball.pos.y += ball.vel.y *dt;
+
+		if(ball.left < 0 || ball.right > canvas.width){
+			
+			reset();
+
+		}
+		if(ball.bottom < 0 || ball.top > canvas.height){
+			ball.vel.y = -ball.vel.y;
+		}
+
+		players[1].pos.y = ball.pos.y;
+
+		players.forEach( function(player,index) {
+			collide(player,ball,index);
+		});
+		draw();
+		
+	}
+
+	function drawRect(rect){
+		context.fillStyle = '#fff';
+		context.fillRect(rect.left,rect.top,rect.size.x,rect.size.y);
+	}
+
+	function draw(){
+		context.fillStyle = '#000';
+		context.fillRect(0,0,canvas.width,canvas.height);
+		drawRect(ball);
+		players.forEach( function(player) {
+			drawRect(player);
+		});
+		drawScore();
+	}
+
+	function collide(player,ball,index){
+		if(player.left < ball.right && player.right > ball.left &&
+		   player.top < ball.bottom && player.bottom > ball.top){
+		   	if(index==1){
+		   		player.score++;
+		   	}
+			ball.vel.x = -ball.vel.x;
+			ball.vel.x *= 1.05;
+			ball.vel.y += 200 * Math.random() * (Math.random() > 0.5 ? 1 : -1);
+
+		}
+	}
+
+	function reset(){
+		ball.pos.x = canvas.width/2;
+		ball.pos.y = canvas.height/2;
+
+		ball.vel.x = 0;
+		ball.vel.y = 0;
+
+		players[1].score = 0;
+	}
+
+	function start(){
+		if(ball.vel.x == 0 && ball.vel.y == 0){
+			ball.vel.x = 300 * (Math.random() > 0.5 ? 1 : -1);
+			ball.vel.y = 200 * (Math.random() * 2 - 1);
+		}
+	}
+
+	function drawScore(){
+		var align = canvas.width / 2;
+		var charW = charPixel * 4;
+		var char = players[1].score.toString().split('');
+		var offset = align  - (charW * char.length / 2) + charPixel / 2;
+		char.forEach( function(char, pos) {
+			context.drawImage(chars[char | 0],offset + pos * charW,20);
+		});	
+	}
+
+
+	callback();
+ 	reset();
+
+	canvas.onmousemove = function(event){
+		var scale = event.offsetY / event.target.getBoundingClientRect().height;
+		players[0].pos.y = canvas.height * scale;
+	}
+	canvas.onclick = function(){
+		start();
+	}
+
+</script>
+</html>
