@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		fieldset{
+			min-width: 200px;
+			margin: 20px 20px;
+
+		}
+		fieldset label{
+			margin-right: 20px;
+		}
+		.left button {
+			margin: 5px 20px;
+			background-color: #2563AD;
+			color: #fff;
+			height: 40px;
+			width: 90px;
+			font-size: 24px;
+			border: none;
+			border-radius: 5px;
+		}
+		.display-none{
+			display: none;
+		}
+		.show{
+			border: 2px solid #304058;
+			min-width: 600px;
+			min-height: 300px;
+			float: left;
+			margin: 0px 50px;
+			border-radius:5%;
+			text-align:center;
+			position:relative;
+
+		}
+		.left{
+			border: 1px solid blue;
+			width: 25%;
+			float: left;
+
+		}
+		.show .title{
+			color: #4F96BF;
+			font-size: 50px;
+			text-shadow: rgb(71, 71, 71) 3px 3px 5px;
+			margin: auto auto;
+			font-family:標楷體;
+			text-align:center
+		}
+		#send{
+			background-color: #2563AD;
+			margin: 20px ;
+			color: #fff;
+			height: 40px;
+			width: 90px;
+			font-size: 24px;
+			border: none;
+			border-radius: 5px;
+			position:relative;
+			
+			
+		}
+		.result{
+			margin: 10px 20px;
+			font-size:25px;
+		}
+		.result input{
+			font-size:25px;
+		}
+		.divOption{
+			transition: 0.5s;
+			float: left;
+			min-height: 25px;
+			min-width: 25px;
+			border-radius: 5px;
+			margin: 3px 3px;
+			color: LemonChiffon ;
+			background-color: CornflowerBlue;
+			text-align: center;
+			line-height: 25px;
+		}
+		.divOption:hover {
+			background-color: lightgreen;
+		}
+		.addP{
+			font-size: 17px;
+			color: #777;
+		}
+	</style>
+</head>
+<body style="background-color: #c6c6c6;" >
+	<div class="left">
+		<fieldset>
+			<legend>類型:</legend>
+			<input type="radio" name="type" checked="">輸入框
+			<input type="radio" name="type">單選框
+			<input type="radio" name="type">多選框</br>
+			<input type="radio" name="type">下拉框
+			<input type="radio" name="type">文本域
+		</fieldset>
+		<fieldset>
+			<legend>配置:</legend>
+			名稱：<input type="text" id="disposeName" value="姓名"></br>
+			<input type="radio" name="need" checked="" ><label>必填</label>
+			<input type="radio" name="need" ><label>選填</label>
+			樣式：<select id="dataStyle">
+				<option value="1">一</option>
+				<option value="2">二</option>
+			</select>
+		</fieldset>
+		<fieldset id="dataRule">
+			<legend>規則:</legend>
+			<input type="radio" name="rule" checked="" value="word">文字
+			<input type="radio" name="rule" value="number">數字
+			<input type="radio" name="rule" value="email">信箱</br>
+			<input type="radio" name="rule" value="phone">電話
+			<input type="radio" name="rule" value="password">密碼
+		</fieldset>
+
+		<fieldset id="dataLimit">
+			<legend>長度限制:</legend>
+			長度：<input type="text" name="limit" value="4" style="width:40px">～<input type="text" name="limit" value="16" style="width:40px">
+		</fieldset>
+
+		<fieldset id="dataOption" style="min-height: 100px;" class="display-none">
+			<legend>選項:</legend>
+			<input type="text" id="option" value="" style="width:100%;" placeholder="使用,、空白、enter分隔選項">
+		</fieldset>
+		<button id = "button">Add</button>
+	</div>
+
+	<div class="show" id="show">
+		<span class="title">表單展示區</span>
+		
+		
+		<input type="button" id="send" class="display-none" value="提交">
+	</div>
+
+</body>
+<script>
+	//window.onload = function(){
+
+
+		var type = document.getElementsByName('type');
+		var need = document.getElementsByName('need');
+		var dataStyle = document.getElementById('dataStyle');
+		var rule = document.getElementsByName('rule');
+		var limit = document.getElementsByName('limit');
+		var dataRule = document.getElementById('dataRule');
+		var dataLimit = document.getElementById('dataLimit');
+		var dataOption = document.getElementById('dataOption');
+		var left = document.getElementsByClassName('left')[0];
+		var btn = document.getElementById('button');
+		var disposeName = document.getElementById('disposeName');
+		var option = document.getElementById('option');
+		var sendBtn = document.getElementById('send');
+		var show = document.getElementById('show');
+		var addArr = [];
+		var add = {
+			type:'text',
+			need:true,
+			rule:'word',
+			minLimit:4,
+			maxLimit:16,
+			option:[],
+			name:'',
+			vaild:false,
+		};
+		
+
+
+		left.onclick = function(){
+
+			if(type[0].checked == true){
+				
+				dataDisplay(dataRule,dataLimit);
+				add.type = 'text';
+				if(rule[2].checked == true || rule[3].checked == true){
+					dataLimit.className = 'display-none';
+					if(rule[2].checked == true){
+						disposeName.value = '信箱';
+						add.rule = rule[2].value;
+					}else if (rule[3].checked == true) {
+						disposeName.value = '電話';
+						add.rule = rule[3].value;
+					}
+				}else{
+					dataLimit.className = '';
+					if(rule[0].checked == true){
+						disposeName.value = '文字';
+						add.rule = rule[0].value;
+					}else if (rule[1].checked == true) {
+						disposeName.value = '數字';
+						add.rule = rule[1].value;
+					}else if (rule[4].checked == true) {
+						disposeName.value = '密碼';
+						add.rule = rule[4].value;
+					}
+				}
+			}else if (type[4].checked == true){
+				dataDisplay(dataLimit);
+				rule[0].checked = true ;
+				add.type = 'textarea';
+			}else if(type[1].checked == true || type[2].checked == true || type[3].checked == true){
+				dataDisplay(dataOption);
+				if(type[1].checked == true){
+					add.type = 'radio';
+				}else if (type[2].checked == true) {
+					add.type = 'checkbox';
+				}else if (type[3].checked == true) {
+					add.type = 'select';
+				}
+			}
+
+			if(need[0].checked == true){
+				add.need = true;
+				add.vaild = false;
+			}else if (need[1].checked == true) {
+				add.need = false;
+				add.vaild = true;
+			}
+
+
+		}
+
+		function dataDisplay(obj1,obj2){
+			dataOption.className = dataLimit.className = dataRule.className = 'display-none';
+			obj1.className = '';
+			if(obj2)obj2.className = '';
+		}
+		
+		limit[0].onkeyup = limit[1].onkeyup  = function(event){	
+			if(!/^\d+$/.test(event.target.value)){
+				event.target.value = event.target.value.match(/^\d+/g);
+			}
+			add.minLimit = limit[0].value;
+			add.maxLimit = limit[1].value;
+		}
+
+		btn.onclick = function(){
+			if(limit[0].value == "" || limit[0].value == "0"){
+				checkLimit(limit[0]);
+				return;
+			}
+			if(limit[1].value == "" || limit[1].value == "0"){
+				checkLimit(limit[1]);
+				return;
+			}
+			if(parseInt(limit[0].value) > parseInt(limit[1].value)){
+				alert('最小限制長度不能大於最大限制長度');
+				return;
+			}
+
+			for (var i = 0; i < dataOption.childElementCount; i++) {
+				if(dataOption.children[i].tagName == 'DIV'){
+					add.option.push(dataOption.children[i].innerHTML);
+				}
+			}
+			sendBtn.className = '';
+			add.name = disposeName.value;
+			addArr.push(add.vaild);
+			create(add);
+			
+
+		}
+
+		function checkLimit(obj){
+			alert('限制長度不能為空或0');
+			obj.value = 1;
+		}
+
+		option.onkeyup = function(event){
+			var key = option.value.match(/[,，]/)? true : false;
+			if(event.keyCode == 13||event.keyCode ==32||key){
+				if(option.value.match(/^[^,， ]+/)){
+					var key2 = true;
+					for(var i = 5 ; i < dataOption.childNodes.length; i++){
+						if(option.value.match(/^[^,， ]+/)==dataOption.childNodes[i].innerHTML){
+							key2 = false;
+							break;
+						}
+					}
+					if(key2){
+						var div = document.createElement("div");
+						div.innerHTML = option.value.match(/^[^,， ]+/);
+						div.className = 'divOption';
+						div.onmouseover = function(event){
+							event.target.innerHTML = "刪除：" + event.target.innerHTML;
+							var temp = event.target.innerHTML;
+						};
+						div.onmouseout = function(event){event.target.innerHTML = event.target.innerHTML.slice(3);};
+						div.onclick = function(event){event.target.remove();};
+						dataOption.appendChild(div);
+
+					}
+				}
+				option.value = "";
+			}
+		}
+
+		function create(obj){
+
+			var div = document.createElement('div');
+			var span = document.createElement('span');
+			var input = document.createElement('input');
+			var p = document.createElement('p');
+			
+			p.className = 'addP';
+			div.className = 'result';
+			span.innerHTML = obj.name + '：';
+			if(obj.type == 'text'){
+				input.type = obj.type;
+				var name = add.name;
+				var min = add.minLimit;
+				var max = add.maxLimit;
+				var vaildNum = addArr.length-1;
+				var need = add.need;
+				var addRule = add.rule;
+				input.onclick = function(){
+					var n = need?'必填':'選填';
+					if(addRule == 'word'){
+						p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個字元';
+					}else if (addRule == 'number') {
+						p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個數字';
+					}else if (addRule == 'phone') {
+						p.innerHTML = n+'，'+name + '：' + '請輸入電話';
+					}else if (addRule == 'email') {
+						p.innerHTML = n+'，'+name + '：' + '請輸入信箱';
+					}else if (addRule == 'password') {
+						p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個英文或數字';
+					}
+					
+				};
+				
+				if(need){
+					input.onkeyup = function(){
+						
+						if(addRule == 'word'){
+							addArr[vaildNum] = validFn(checkWord(input.value,min,max),p,input);
+						}else if (addRule == 'number') {
+							p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個數字';
+						}else if (addRule == 'phone') {
+							p.innerHTML = n+'，'+name + '：' + '請輸入電話';
+						}else if (addRule == 'email') {
+							p.innerHTML = n+'，'+name + '：' + '請輸入信箱';
+						}else if (addRule == 'password') {
+							p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個英文或數字';
+						}
+					}
+				}
+
+			}else if (obj.type == 'radio') {
+				input.type = obj.type;
+			}
+			
+
+			div.appendChild(span);
+			div.appendChild(input);
+			div.appendChild(p);
+			show.insertBefore(div,sendBtn);
+		}
+
+		function validFn(fn,elementP,elementInput){
+			if(fn.check){
+				elementP.innerHTML = fn.right;
+				elementP.style.color = 'green';
+				elementInput.style.color = 'green';
+				elementInput.style.border = '1px solid green';
+				return true;
+			}else{
+				elementP.innerHTML = fn.error;
+				elementP.style.color = 'red';
+				elementInput.style.color = 'red';
+				elementInput.style.border = '1px solid red';
+				return false;
+			}
+		}
+
+		function countLength(str) {
+			var inputLength = 0;
+			for (var i = 0; i < str.length; i++) {
+				var countCode = str.charCodeAt(i);
+				if (countCode >= 0 && countCode <=128) {
+					inputLength += 1;
+				} else {
+					inputLength += 2;
+				}
+			}
+			return inputLength;
+		}
+
+		function checkWord(word,min,max){
+			if (countLength(word) == 0) {
+				return {check:false , error : '不能空白'};
+			} 
+			else if (countLength(word) >=min && countLength(word) <= max) {
+				return {check:true , right:'格式正確'};
+			} 
+			else {
+				return {check: false , error : '請輸入'+min+'~'+max+'個字元'};
+			}
+		}
+
+		function checkNumber (number) {
+			var numberRule = /09\d{2}-\d{6}/;
+			if(number.search(numberRule)!= -1){
+			    return {check: true , right:'格式正確'};
+			}
+			else{
+			    return {check: false , error : '請參略格式09xx-123456'};
+			}
+		}
+
+	//}
+</script>
+</html>
