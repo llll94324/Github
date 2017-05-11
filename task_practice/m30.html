@@ -139,7 +139,7 @@
 	}
 
 	function checkPhonenumber (phonenumber) {
-		var phonenumberRule = /09\d{2}-\d{6}/;
+		var phonenumberRule = /09\d{2}-\d{6}$/;
 		if(phonenumber.search(phonenumberRule)!= -1){
 		    return {check: true , right:'格式正確'};
 		}

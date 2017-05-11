@@ -89,6 +89,12 @@
 			font-size: 17px;
 			color: #777;
 		}
+		.optionP{
+			font-size: 15px;
+			position: relative;
+			float: all;
+		}
+
 	</style>
 </head>
 <body style="background-color: #c6c6c6;" >
@@ -202,15 +208,19 @@
 				}
 			}else if (type[4].checked == true){
 				dataDisplay(dataLimit);
+				disposeName.value = '文本域';
 				rule[0].checked = true ;
 				add.type = 'textarea';
 			}else if(type[1].checked == true || type[2].checked == true || type[3].checked == true){
 				dataDisplay(dataOption);
 				if(type[1].checked == true){
+					disposeName.value = '單選框';
 					add.type = 'radio';
 				}else if (type[2].checked == true) {
+					disposeName.value = '多選框';
 					add.type = 'checkbox';
 				}else if (type[3].checked == true) {
+					disposeName.value = '下拉框';
 					add.type = 'select';
 				}
 			}
@@ -259,12 +269,17 @@
 					add.option.push(dataOption.children[i].innerHTML);
 				}
 			}
+			if(type[1].checked == true){
+				if(!add.option[0]){
+					alert('您沒有添加選項');
+					return;
+				}
+			}
 			sendBtn.className = '';
 			add.name = disposeName.value;
 			addArr.push(add.vaild);
 			create(add);
-			
-
+			add.option = [];
 		}
 
 		function checkLimit(obj){
@@ -305,20 +320,23 @@
 
 			var div = document.createElement('div');
 			var span = document.createElement('span');
-			var input = document.createElement('input');
 			var p = document.createElement('p');
-			
+			var name = add.name;
+			var min = add.minLimit;
+			var max = add.maxLimit;
+			var vaildNum = addArr.length-1;
+			var need = add.need;
+			var addRule = add.rule;
 			p.className = 'addP';
 			div.className = 'result';
 			span.innerHTML = obj.name + '：';
+			span.className = 'resultSpan';
+			div.appendChild(span);
+
 			if(obj.type == 'text'){
+				var input = document.createElement('input');
 				input.type = obj.type;
-				var name = add.name;
-				var min = add.minLimit;
-				var max = add.maxLimit;
-				var vaildNum = addArr.length-1;
-				var need = add.need;
-				var addRule = add.rule;
+				
 				input.onclick = function(){
 					var n = need?'必填':'選填';
 					if(addRule == 'word'){
@@ -331,6 +349,7 @@
 						p.innerHTML = n+'，'+name + '：' + '請輸入信箱';
 					}else if (addRule == 'password') {
 						p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個英文或數字';
+						input.type = 'password';
 					}
 					
 				};
@@ -338,29 +357,55 @@
 				if(need){
 					input.onkeyup = function(){
 						
-						if(addRule == 'word'){
+						if(addRule == 'word'||addRule == 'password'){
 							addArr[vaildNum] = validFn(checkWord(input.value,min,max),p,input);
 						}else if (addRule == 'number') {
-							p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個數字';
+							addArr[vaildNum] = validFn(checkNumber(input.value,min,max),p,input);
 						}else if (addRule == 'phone') {
-							p.innerHTML = n+'，'+name + '：' + '請輸入電話';
+							addArr[vaildNum] = validFn(checkPhonenumber(input.value),p,input);
 						}else if (addRule == 'email') {
-							p.innerHTML = n+'，'+name + '：' + '請輸入信箱';
-						}else if (addRule == 'password') {
-							p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個英文或數字';
+							addArr[vaildNum] = validFn(checkEmail(input.value),p,input);
 						}
 					}
 				}
 
+				div.appendChild(input);
+				div.appendChild(p);
+				show.insertBefore(div,sendBtn);
 			}else if (obj.type == 'radio') {
-				input.type = obj.type;
+				for (i in obj.option) {
+					var optionDiv = document.createElement('div');
+					var input = document.createElement('input');
+					input.type = obj.type;
+					input.name = vaildNum;
+
+					div.appendChild(input);
+
+					div.innerHTML += obj.option[i];
+					
+				}
+				var n = need?'必選':'非必選';
+				p.innerHTML = n;
+				div.appendChild(p);
+				show.insertBefore(div,sendBtn);
+
+				var str = String(vaildNum);
+				var inputRadio = document.getElementsByName(vaildNum);
+				for (var i = 0; i < inputRadio.length; i++) {
+					inputRadio[i].onclick = function(){
+						addArr[vaildNum] = true;
+						p.style.color = 'green';
+					}
+				}
+
+				
 			}
 			
 
-			div.appendChild(span);
-			div.appendChild(input);
-			div.appendChild(p);
-			show.insertBefore(div,sendBtn);
+			
+			
+			
+			
 		}
 
 		function validFn(fn,elementP,elementInput){
@@ -404,9 +449,30 @@
 			}
 		}
 
-		function checkNumber (number) {
-			var numberRule = /09\d{2}-\d{6}/;
+		function checkNumber (number,min,max) {
+			var numberRule = new RegExp("\^\\d{"+min+","+max+"}$");
+			
 			if(number.search(numberRule)!= -1){
+				return {check: true , right:'格式正確'};
+			}
+			else{
+				return {check: false , error : '請輸入'+min+'~'+max+'個數字'};
+			}
+		}
+
+		function checkEmail (email) {
+			var emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+			if(email.search(emailRule)!= -1){
+			    return {check: true , right:'格式正確'};
+			}
+			else{
+			    return {check: false , error : '請參略格式xxx@xxx.xxx'};
+			}
+		}
+
+		function checkPhonenumber (phonenumber) {
+			var phonenumberRule = /09\d{2}-\d{6}$/;
+			if(phonenumber.search(phonenumberRule)!= -1){
 			    return {check: true , right:'格式正確'};
 			}
 			else{
