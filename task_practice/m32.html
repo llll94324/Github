@@ -112,10 +112,6 @@
 			名稱：<input type="text" id="disposeName" value="姓名"></br>
 			<input type="radio" name="need" checked="" ><label>必填</label>
 			<input type="radio" name="need" ><label>選填</label>
-			樣式：<select id="dataStyle">
-				<option value="1">一</option>
-				<option value="2">二</option>
-			</select>
 		</fieldset>
 		<fieldset id="dataRule">
 			<legend>規則:</legend>
@@ -133,7 +129,7 @@
 
 		<fieldset id="dataOption" style="min-height: 100px;" class="display-none">
 			<legend>選項:</legend>
-			<input type="text" id="option" value="" style="width:100%;" placeholder="使用,、空白、enter分隔選項">
+			<input type="text" id="option" value="" style="width:100%;" placeholder="使用,、空白、enter增加選項">
 		</fieldset>
 		<button id = "button">Add</button>
 	</div>
@@ -149,7 +145,6 @@
 <script>
 	//window.onload = function(){
 
-
 		var type = document.getElementsByName('type');
 		var need = document.getElementsByName('need');
 		var dataStyle = document.getElementById('dataStyle');
@@ -164,6 +159,7 @@
 		var option = document.getElementById('option');
 		var sendBtn = document.getElementById('send');
 		var show = document.getElementById('show');
+		
 		var addArr = [];
 		var add = {
 			type:'text',
@@ -176,12 +172,9 @@
 			vaild:false,
 		};
 		
-
-
 		left.onclick = function(){
 
-			if(type[0].checked == true){
-				
+			if(type[0].checked == true){			
 				dataDisplay(dataRule,dataLimit);
 				add.type = 'text';
 				if(rule[2].checked == true || rule[3].checked == true){
@@ -316,17 +309,27 @@
 			}
 		}
 
+		sendBtn.onclick = function(){
+			for (var i = 0; i < addArr.length; i++) {
+				if(addArr[i] == false){
+					alert('提交失敗，請檢查');
+					return;
+				}
+			}
+			alert('提交成功');
+		}
+
 		function create(obj){
 
 			var div = document.createElement('div');
 			var span = document.createElement('span');
 			var p = document.createElement('p');
-			var name = add.name;
-			var min = add.minLimit;
-			var max = add.maxLimit;
+			var name = obj.name;
+			var min = obj.minLimit;
+			var max = obj.maxLimit;
 			var vaildNum = addArr.length-1;
-			var need = add.need;
-			var addRule = add.rule;
+			var need = obj.need;
+			var addRule = obj.rule;
 			p.className = 'addP';
 			div.className = 'result';
 			span.innerHTML = obj.name + '：';
@@ -372,7 +375,8 @@
 				div.appendChild(input);
 				div.appendChild(p);
 				show.insertBefore(div,sendBtn);
-			}else if (obj.type == 'radio') {
+
+			}else if (obj.type == 'radio'||obj.type == 'checkbox') {
 				for (i in obj.option) {
 					var optionDiv = document.createElement('div');
 					var input = document.createElement('input');
@@ -384,26 +388,85 @@
 					div.innerHTML += obj.option[i];
 					
 				}
-				var n = need?'必選':'非必選';
+				var n = need?'請選擇':'非必選';
 				p.innerHTML = n;
 				div.appendChild(p);
 				show.insertBefore(div,sendBtn);
-
 				var str = String(vaildNum);
-				var inputRadio = document.getElementsByName(vaildNum);
-				for (var i = 0; i < inputRadio.length; i++) {
-					inputRadio[i].onclick = function(){
-						addArr[vaildNum] = true;
-						p.style.color = 'green';
+				
+				if (obj.type == 'radio'){
+					if(need){
+						var inputRadio = document.getElementsByName(vaildNum);
+						for (var i = 0; i < inputRadio.length; i++) {
+							inputRadio[i].onclick = function(){
+								addArr[vaildNum] = true;
+								p.style.color = 'green';
+								p.innerHTML = '格式正確';
+							}
+						}
+					}
+				}
+				if (obj.type == 'checkbox'){
+					if(need){
+						var inputCheckbox = document.getElementsByName(vaildNum);
+						var resultDiv = document.getElementsByClassName('result');
+						var falseNum = inputCheckbox.length;
+						for (var i = 0; i < inputCheckbox.length; i++) {
+							inputCheckbox[i].onclick = function(i){
+								return function(){
+									if(inputCheckbox[i].checked == true){
+										addArr[vaildNum] = true;
+										p.style.color = 'green';
+										falseNum--;
+										p.innerHTML = '格式正確';
+									}else{
+										falseNum++;
+										if(falseNum == inputCheckbox.length){
+											addArr[vaildNum] = false;
+											p.style.color = 'red';
+											p.innerHTML = '請勾選';
+										}										
+									}
+								}								
+							}(i);
+						}	
+					}
+				}	
+			}else if (obj.type == 'select'){
+				var resultSelect = document.createElement('select');
+				for (i in obj.option) {
+					var selectOption = document.createElement('option');
+					selectOption.innerHTML = obj.option[i];
+					resultSelect.appendChild(selectOption);
+				}
+				div.appendChild(resultSelect);
+				p.innerHTML = '格式正確';
+				p.style.color = 'green';
+				div.appendChild(p);
+				show.insertBefore(div,sendBtn);
+				addArr[vaildNum] = true;
+			}else if (obj.type == 'textarea'){
+				var textarea = document.createElement('textarea');
+				textarea.cols = '25';
+				textarea.rows = '3';
+				textarea.style.position = 'relative';
+				textarea.style.top += 12 + 'px';
+				textarea.onclick = function(){
+					var n = need?'必填':'選填';
+					p.innerHTML = n+'，'+name + '：' + '請輸入'+min+'~'+max+'個字元';
+		
+				};
+
+				if(need){
+					textarea.onkeyup = function(){
+						addArr[vaildNum] = validFn(checkWord(textarea.value,min,max),p,textarea);
 					}
 				}
 
-				
+				div.appendChild(textarea);
+				div.appendChild(p);
+				show.insertBefore(div,sendBtn);
 			}
-			
-
-			
-			
 			
 			
 		}
