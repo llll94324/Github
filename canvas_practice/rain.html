@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		html,body{
+			height: 100%;
+		}
+		canvas{
+			width: 100%;
+			height: 100%;
+			background: #000;
+			display: block;
+		}
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+
+	<canvas id="canvas">您的瀏覽器不支援canvas標籤，請您更換</canvas>
+</body>
+<script>
+	var can = document.getElementById('canvas');
+	var cxt = can.getContext('2d');
+	var w = can.width = window.innerWidth;
+	var h = can.height = window.innerHeight;
+
+	window.onresize = function() {
+		w = can.width = window.innerWidth;
+		h = can.height = window.innerHeight;
+	}
+
+	var drops = [];
+	//創見雨滴對象
+	function Drop(){};
+
+	//添加原型對象方法
+	Drop.prototype = {
+		init : function(){
+			//設置座標
+			this.x = random(0,w);
+			this.y = 0;
+			//y方向速度值
+			this.vy = random(1,10);
+			this.l = random(0.8*h,0.9*h);
+			this.r = random(1,5);
+			this.vr = random(0.66,1);
+			this.a = 1;
+			this.va = random(0.9,0.96);
+			this.limit = random(33,99);
+		},
+		//繪製圖形
+		draw : function(){
+			if(this.y > this.l){
+				cxt.beginPath();
+				cxt.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+				cxt.strokeStyle = 'rgba(50,200,255,'+this.a+')';
+				cxt.stroke();
+			}else{
+				cxt.fillStyle = 'rgb(50,200,255)';
+				cxt.fillRect(this.x,this.y,2,20);
+			}
+			this.update();
+		},
+		update : function(){
+			if(this.y < this.l){
+				this.y += this.vy;
+			}else{
+				if(this.a > 0.03){
+					this.r += this.vr;
+					if(this.r > this.limit){
+						this.a *= this.va;
+					}
+				}else{
+					this.init();
+				}
+				
+			}
+
+		},
+	}
+
+	//建立雨滴實例對象
+	for (var i = 0; i < 30; i++) {
+		var drop = new Drop();
+		drop.init();
+		drops.push(drop);
+	}
+
+
+	function move(){
+		cxt.fillStyle = 'rgba(0,0,0,0.1)';
+		cxt.fillRect(0,0,w,h);
+		for (var i = 0; i < drops.length; i++) {
+			drops[i].draw();
+		}
+		requestAnimationFrame(move);
+	}
+	move();
+
+	//生成隨機數方法
+	function random(min,max){
+		return Math.random() * (max-min) + min;
+	}
+
+
+
+</script>
+</html>
