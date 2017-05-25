@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<input type="button" id="inp" value="Click">
+
+</body>
+<script>
+
+
+	(function(window,undefined){
+		function _$(arguments){
+			var idSelector = /#\w+/;
+			this.dom;
+			if(idSelector.test(arguments[0])){
+				this.dom = document.getElementById(arguments[0].substring(1));
+			}else{
+				throw new Error('arguments is error');
+			}
+		};
+		/*Function.prototype.method = function(methodName,fn){
+			this.prototype[methodName] = fn;
+			this.prototype[methodName]();
+			return this;
+
+		};*/
+		_$.prototype = {
+			constructor : _$,
+			addEvent : function(type,fn){
+				this.dom.addEventListener(type,fn);
+				return this;
+			},
+			setStyle : function(prop,val){
+				this.dom.style[prop] = val;
+				return this;
+			},
+		};
+
+		window.$ = _$;
+
+		_$.onReady = function(fn){
+			window.$ = function(){
+				return new _$(arguments);
+			}
+
+			fn();
+
+			//_$.method('addEvent',function(){}).method('setStyle',function(){});
+		};
+
+	})(window);
+
+	/*$.method('test1',function(){console.log('test1')}).method('test2',function(){console.log('test2')});*/
+
+	$.onReady(function(){
+		//$('test').addEvent().setStyle();
+		var inp = $('#inp');
+		inp.addEvent('click',function(){
+			console.log('我被點ㄌ');
+		}).setStyle('backgroundColor','red');
+	});
+
+
+
+</script>
+</html>

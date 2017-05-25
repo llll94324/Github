@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+
+
+</body>
+<script>
+	//methods接收方法名稱的數組
+	var Interface = function (name,methods){
+		if(arguments.length != 2){
+			throw new Error('this instance interface constructor must be 2 length');
+		}
+
+		this.name = name;
+		this.methodArr = [];
+		for(var i = 0, length1 = methods.length; i < length1; i++){
+			if(typeof methods[i] !== 'string'){
+				throw new Error('the Interface method name is error');
+			}
+			this.methodArr.push(methods[i]);
+		}
+
+	};
+
+
+	var CompositeInterface = new Interface('CompositeInterface',['add','remove']);
+	var FormItemInterface = new Interface('FormItemInterface',['update','select']);
+
+
+	var CompositeImpl = function(){
+
+	}
+	CompositeImpl.prototype.add = function(obj){
+		console.log('add...');
+	};
+	CompositeImpl.prototype.remove = function(obj){
+		console.log('remove...');
+	};
+	CompositeImpl.prototype.update = function(obj){
+		console.log('update...');
+	};
+	CompositeImpl.prototype.select = function(obj){
+		console.log('select...');
+	};
+
+
+
+	function ensureImplements(object){
+		if(arguments.length < 2){
+			throw new Error('Interface.ensureImplements method constructor arguments must be >= 2');
+		}
+		for(var i = 1, length1 = arguments.length; i < length1; i++){
+			var instanceInterface = arguments[i];
+			
+			if(instanceInterface.constructor !== Interface){
+				throw new Error('the arguments constructor not be Interface Class');
+			}
+			for(var j = 0, length2 = instanceInterface.methodArr.length; j < length2; j++){
+				
+				var methodName = instanceInterface.methodArr[j];
+				console.log(methodName + ' method already vaild');
+				if(!object[methodName] || typeof object[methodName] !== 'function'){
+					throw new Error("'" + methodName + "'" + ' method is not found');
+				}
+			}
+		}
+	};
+
+	var c1 = new CompositeImpl();
+	
+	ensureImplements(c1,CompositeInterface,FormItemInterface);
+
+	c1.add();
+	c1.select();
+
+
+
+
+</script>
+</html>

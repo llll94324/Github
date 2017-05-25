@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript" src='CommonUtil.js'></script>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+
+
+</body>
+<script>
+	function CarShop(){};
+	CarShop.prototype = {
+		constructor : CarShop,
+		sellCar : function(type){
+			//var car = CarFactory.createCar(type);
+			//return car;
+			this.abstractSellCar(type);
+		},
+		abstractSellCar : function(){
+			throw new Error('this method is abstract');
+		}
+
+	};
+
+	function BenzCarShop(){
+
+	};
+	BH.extend(BenzCarShop,CarShop);
+	BenzCarShop.prototype = {
+		constructor : BenzCarShop,
+		sellCar : function(type){
+			var car;
+			var types = ['Benz'];
+			for (t in types) {
+				if(types[t] === type){
+					car = CarFactory.createCar(type);
+				}else{
+					console.log('沒有你要的型號');
+				}
+			}
+			return car;
+		}
+	};
+
+	function BmwCarShop(){
+
+	};
+	BH.extend(BmwCarShop,CarShop);
+	BmwCarShop.prototype = {
+		constructor : BmwCarShop,
+		sellCar : function(type){
+			var car;
+			var types = ['Bmw'];
+			for (t in types) {
+				if(types[t] === type){
+					car = CarFactory.createCar(type);
+				}else{
+					console.log('沒有你要的型號');
+				}
+			}
+			return car;
+		}
+	};
+	
+
+
+	var CarFactory = {
+		createCar : function(type){
+			var car = eval('new ' + type + '()');
+			
+			BH.ensureImplements(car,CarInterface);
+			return car;
+		}
+
+	};
+
+
+
+
+	var CarInterface = new BH.Interface('CarInterface',['start','run']);
+
+	function BaseCar(){};
+	BaseCar.prototype = {
+		constructor : BaseCar,
+		start : function(){
+			console.log(this.constructor.name + ' ..start');
+		},
+		run : function(){
+			console.log(this.constructor.name + ' ..run');
+		},
+
+	};
+
+	function Benz(){};
+	//一定要先繼承，在添加原型方法，否則原型方法會被沖掉
+	BH.extend(Benz,BaseCar);
+	Benz.prototype.BenzDrive = function(){console.log(this.constructor.name + ' ..drive')};
+
+
+	function Bmw(){};
+	BH.extend(Bmw,BaseCar);
+
+	
+
+	
+	var shop1 = new BenzCarShop();
+	var car1 = shop1.sellCar('Benz');
+	car1.start();
+	car1.run();
+	car1.BenzDrive();
+	
+	var shop2 = new BmwCarShop();
+	var car2 = shop2.sellCar('Bmw');
+	car2.start();
+	car2.run();
+
+</script>
+</html>
