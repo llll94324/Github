@@ -52,4 +52,68 @@ BH.extend = function(sub,sup){
 	if(sup.prototype.constructor == Object.prototype.constructor){
 		sup.prototype.constructor = sup;
 	}
+};
+
+
+BH.EventUtil = {
+	addHandler : function(element,type,handler){
+		if(element.addEventListener){
+			element.addEventListener(type,handler,false);
+		}else if(element.attachEvent){
+			element.attachEvent('on' + type,handler);
+		}
+	},
+	removeHandler : function(element,type,handler){
+		if(element.removeEventListener){
+			element.removeEventListener(type,handler,false);
+		}else if(element.detachEvent){
+			element.detachEvent('on' + type,handler);
+		}
+	}
+};
+
+
+Array.prototype.each = function(fn){
+	try {
+		this.i || (this.i = 0);
+		if(this.length > 0 && fn.constructor == Function){
+			while (this.i < this.length) {
+				var e = this[this.i];
+
+				if(e && e.constructor == Array){
+					e.each(fn);
+				}else{
+					fn.call(e,e);
+				}
+				this.i++;
+			}
+			this.i = null;
+		}
+
+	} catch(ex) {
+
+	}
+	return this;
+}
+
+function setCss(elementsId,option){
+	for (prop in option) {
+		if(!option.hasOwnProperty(prop)) continue;
+		for(var i = 0, length1 = elementsId.length; i < length1; i++){
+			document.getElementById(elementsId[i]).style[prop] = option[prop];
+		}
+	}
+}
+
+function $(){
+	var elements = [];
+	if(arguments.length == 1 && arguments[0] instanceof Array ){
+		elements = $.apply(null,arguments[0]);
+	}
+	for(var i = 0, length1 = arguments.length; i < length1; i++){
+		if( typeof arguments[i] == 'string'){
+			elements.push(document.getElementById(arguments[i]));
+		}
+	}
+	return elements.length > 1 ? elements : elements[0];
 }

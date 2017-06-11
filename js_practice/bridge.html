@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Js_practice</title>
+	<script src = 'https://code.jquery.com/jquery-3.2.1.min.js'></script>
+	<script type="text/javascript" src='CommonUtil.js'></script>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<input type="button" id="inp" value="Data">
+
+</body>
+<script>
+	var PublicClass = function(name){
+		this.name = name;
+		
+		this.call = function(){
+			console.log(this.name);
+		}
+	}
+
+	var cc = new PublicClass('Snow');
+	cc.call();
+</script>
+</html>

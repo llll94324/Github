@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Js_practice</title>
+	<script src = 'https://code.jquery.com/jquery-3.2.1.min.js'></script>
+	<script type="text/javascript" src='CommonUtil.js'></script>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<input type="button" id="pub1" value="第一報社"><input id="text1" value=""><br>
+	<input type="button" id="pub2" value="第二報社"><input id="text2" value=""><br>
+	<input type="button" id="pub3" value="第三報社"><input id="text3" value=""><br>
+
+	<textarea id="sub1" rows="5" cols="30"></textarea>
+	<textarea id="sub2" rows="5" cols="30"></textarea>
+
+</body>
+<script>
+	
+	var Publish = function(name){
+		this.name = name;
+		this.subscribers = [];
+	}
+
+	Publish.prototype.deliver = function(news){
+		var publish = this;
+		
+		this.subscribers.forEach( function(fn) {
+			fn(news,publish);
+		});
+		return this;
+	}
+
+	Function.prototype.subscribe = function(publish){
+		var sub = this;
+
+		var alreadyExists = publish.subscribers.some(function(item){
+			return item === sub;
+		});
+		if(!alreadyExists){
+			publish.subscribers.push(this);
+		}
+		return this;
+	};
+
+	Function.prototype.unsubscribe = function(publish){
+		var sub = this;
+		publish.subscribers = publish.subscribers.filter(function(item){
+			return item !== sub;
+		});
+		return this;
+	}
+
+
+
+	var pub1 = new Publish("第1報社");
+	var pub2 = new Publish("第2報社");
+	var pub3 = new Publish("第3報社");
+
+
+	var sub1 = function(news){
+		$('sub1').innerHTML += arguments[1].name + ':' + news + '\n';
+	};
+	var sub2 = function(news){
+		$('sub2').innerHTML += arguments[1].name + ':' + news + '\n';
+	};
+
+	sub1.subscribe(pub1).subscribe(pub2).subscribe(pub3);
+	sub2.subscribe(pub1).subscribe(pub2);
+
+	BH.EventUtil.addHandler($('pub1'),'click',function(){
+		pub1.deliver($('text1').value);
+	});
+	BH.EventUtil.addHandler($('pub2'),'click',function(){
+		pub2.deliver($('text2').value);
+	});
+	BH.EventUtil.addHandler($('pub3'),'click',function(){
+		pub3.deliver($('text3').value);
+	});
+
+
+</script>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Js_practice</title>
+	<script src = 'https://code.jquery.com/jquery-3.2.1.min.js'></script>
+	<script type="text/javascript" src='CommonUtil.js'></script>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<div id="div1">DIV1</div>
+	<div id="div2">DIV2</div>
+	<div id="div3">DIV3</div>
+</body>
+<script>
+
+	var CompositeInterface = new BH.Interface('CompositeInterface',['addChild','getChild']);
+	var LeafInterface = new BH.Interface('LeafInterface',['working','sleeping']);
+
+	var Composite = function(name){
+		this.name = name;
+		this.type = 'Composite';
+		this.children = [];
+	};
+
+	Composite.prototype = {
+		constructor : Composite,
+		addChild : function(child){
+			this.children.push(child);
+			return this;
+		},
+		getChild : function(name){
+			var elements = [];
+
+			var pushLeaf = function(item){
+				if(item.type === 'Composite'){
+					item.children.each(arguments.callee);
+				}else if (item.type === 'Leaf') {
+					elements.push(item);
+				}
+			};
+
+			if(name && this.name != name){
+				this.children.each(function(item){
+					if(item.name === name && item.type ==='Composite'){
+						item.children.each(pushLeaf);
+					}
+					if (item.name !== name && item.type ==='Composite') {
+						item.children.each(arguments.callee);
+					}
+					if(item.name === name && item.type ==='Leaf'){
+						elements.push(item);
+					}
+				});
+			}else{
+				this.children.each(pushLeaf);
+			}
+
+			return elements;
+
+		},
+		working : function(name){
+			var leftObjects = this.getChild(name);
+			for(var i = 0, length1 = leftObjects.length; i < length1; i++){
+				leftObjects[i].working();
+			}
+		},
+		sleeping : function(name){
+			var leftObjects = this.getChild(name);
+			for(var i = 0, length1 = leftObjects.length; i < length1; i++){
+				leftObjects[i].sleeping();
+			}
+		},
+	}
+
+	var Leaf = function(name){
+		this.name = name;
+		this.type = 'Leaf';
+	};
+
+	Leaf.prototype = {
+		constructor : Leaf,
+		addChild : function(child){
+			throw new Error('this method is disabled...');
+		},
+		getChild : function(name){
+			if(this.name == name){
+				return this;
+			}
+			return null;
+		},
+		working : function(name){
+			document.write(this.name + ' is working...');
+		},
+		sleeping : function(name){
+			document.write(this.name + ' is sleeping...');
+		},
+	}
+	
+	var p1 = new Leaf('Snow1');
+	var p2 = new Leaf('Snow2');
+	var p3 = new Leaf('Snow3');
+	var p4 = new Leaf('Snow4');
+	var p5 = new Leaf('Snow5');
+	var p6 = new Leaf('Snow6');
+
+	var dept1 = new Composite('開發部門');
+	dept1.addChild(p1).addChild(p2);
+
+	var dept2 = new Composite('銷售部門');
+	dept2.addChild(p3).addChild(p4);
+
+
+	var org = new Composite('北京分公司');
+	org.addChild(dept1).addChild(dept2).addChild(p5).addChild(p6);
+
+	var hq = new Composite('總部');
+	hq.addChild(org);
+
+	org.working('開發部門');
+	org.sleeping('銷售部門');
+
+	//以下是id選擇器$練習
+	var arr1 = $(['div2']);
+	var arr2 = $('div1');
+	console.log(arr1);
+	console.log(arr2);
+</script>
+</html>

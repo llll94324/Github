@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Js_practice</title>
+	<script src = 'https://code.jquery.com/jquery-3.2.1.min.js'></script>
+	<script type="text/javascript" src='CommonUtil.js'></script>
+	<style>
+		
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<input type="button" id="inp" value="Data">
+
+</body>
+<script>
+	var CarInterface = new BH.Interface('CarInterface',['getPrice','assemble']);
+	var Car = function (car) {
+		this.car = car;
+		BH.ensureImplements(this,CarInterface);
+	};
+	Car.prototype = {
+		constructor : Car,
+		getPrice : function(){
+			return 20000;
+		},
+		assemble : function(){
+			document.write('組裝汽車...');
+		},
+	};
+
+	var LightDecorator = function(car){
+		LightDecorator.superClass.constructor.call(this,car);
+	};
+	BH.extend(LightDecorator,Car)
+
+	LightDecorator.prototype = {
+		constructor : LightDecorator,
+		getPrice : function(){
+			return this.car.getPrice() + 1000;
+		},
+		assemble : function(){
+			document.write('組裝車燈...');
+		},
+	}
+
+	var car = new Car();
+	document.write(car.getPrice());
+	car.assemble();
+	car = new LightDecorator(car);
+	document.write(car.getPrice());
+	car.assemble();
+	car = new LightDecorator(car);
+	document.write(car.getPrice());
+	car.assemble();
+
+
+	var CF = (function(){
+		var createCars = {};
+		return {
+			createCar : function(name){
+				if(createCars[name]){
+					console.log(createCars[name] + ' already exist...');
+				}else{
+					createCars[name] = name;
+					console.log(' create ' + createCars[name]);
+				}
+				
+			}
+		}
+	})();
+	
+
+
+
+</script>
+</html>
