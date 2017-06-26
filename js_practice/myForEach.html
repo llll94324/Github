@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#results li.pass{
+			color: green;
+		}
+		#results li.fail{
+			color: red;
+		}
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<ul id="results">
+		
+	</ul>
+
+</body>
+<script>
+	function assert(value,desc){
+		var li = document.createElement('li');
+		li.className = value ? "pass" : "fail";
+		li.appendChild(document.createTextNode(desc));
+		results.appendChild(li);
+		
+		if(!value){
+			li.parentNode.className = "fail";
+		}
+
+		return li;
+	}
+
+	function myForEach(list,callback){
+		for(var i = 0, length1 = list.length; i < length1; i++){
+			callback.call(list[i],i);
+		}
+	}
+	
+	var arr = [function test(){},'333','444'];
+
+	myForEach(arr,function(index){
+		assert(true,index);
+		assert(this == arr[index],'get :' + arr[index] + "---this :" + this);
+	});
+
+
+	var ninja = function myNinja(n){
+		assert(ninja == myNinja,'ninja == myNinja');
+	}
+	ninja();
+	
+	assert(typeof myNinja != 'undefined' ,'myNinja is undefined');
+</script>
+</html>

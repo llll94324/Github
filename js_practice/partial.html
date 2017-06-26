@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#results li.pass{
+			color: green;
+		}
+		#results li.fail{
+			color: red;
+		}
+		#test1{
+			width: 100px;
+			height: 100px;
+			border: 1px solid blue;
+			position: absolute;
+		}
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<ul id="results">
+
+	</ul>
+
+
+	<input type="button" id="click" value="click">
+</body>
+<script>
+	function assert(value,desc){
+		console.log(value);
+		var li = document.createElement('li');
+		li.className = value == true? "pass" : "fail";
+		li.appendChild(document.createTextNode(desc));
+		results.appendChild(li);
+		
+		if(!value){
+			li.parentNode.className = "fail";
+		}
+
+		return li;
+	}
+
+
+	Function.prototype.partial = function(){
+		var fn = this;
+		console.log('this is outside ---------');
+		console.log(arguments);
+		var args = Array.prototype.slice.call(arguments);
+		console.log(args)
+		return function(){
+			var arg = 0;
+
+			console.log('this is inside ---------');
+			console.log(this);
+			for(var i = 0, length1 = args.length; i < length1 && arg < arguments.length; i++){
+				if(args[i] === undefined){
+					args[i] = arguments[arg++];
+				}
+			}
+			return fn.apply(this,args);
+		}
+	}
+	
+	var delay = setTimeout.partial(undefined,1000);
+
+
+	delay(function(){
+		assert(true,'fn will delay 10ms');
+	});
+
+	function test(a,b){
+		console.log(a);
+		console.log(b);
+	}
+	
+	test.partial(1,2)();
+	
+</script>
+</html>

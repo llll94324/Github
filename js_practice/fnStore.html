@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#results li.pass{
+			color: green;
+		}
+		#results li.fail{
+			color: red;
+		}
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<ul id="results">
+		
+	</ul>
+
+</body>
+<script>
+	function assert(value,desc){
+		console.log(value);
+		var li = document.createElement('li');
+		li.className = value ? "pass" : "fail";
+		li.appendChild(document.createTextNode(desc));
+		results.appendChild(li);
+		
+		if(!value){
+			li.parentNode.className = "fail";
+		}
+
+		return li;
+	}
+
+	var store = {
+		nextId : 1,
+		cache : {},
+		add : function(fn){
+			if(!fn.id){
+				fn.id = store.nextId++;
+				return !!(store.cache[fn.id] = fn);
+			}
+
+			return false;
+		}
+	}
+
+	function ninja(){};
+
+	assert(store.add(ninja),"fn is add");
+	assert(store.add(ninja),"fn already add");
+
+
+	function isPrime(value){
+		console.log(isPrime.answers);
+		if(!isPrime.answers) isPrime.answers = {};
+		console.log(isPrime.answers[value] == null);
+		if(isPrime.answers[value] != null){
+			return isPrime.answers[value];
+		}
+
+		var prime = value != 1 ;
+		for(var i = 2; i < value; i++){
+
+			if(value % i == 0){
+				prime = flase;
+				break;
+			}
+		}
+
+		return isPrime.answers[value] = prime;
+	}
+
+	var q = 2;
+	assert(isPrime(q),q + ' is prime');
+
+	function getElements(name){
+		if(!getElements.cache) getElements.cache = {};
+		return getElements.cache[name] = getElements.cache[name] || document.getElementsByTagName(name);
+	}
+</script>
+</html>

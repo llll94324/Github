@@ -47,9 +47,7 @@
 			if(!paused && queue.length){
 				queue.shift()();
 				if(!paused){
-					
 					resume();
-					
 				}
 			}
 		}
@@ -60,7 +58,6 @@
 			li.appendChild(document.createTextNode(desc));
 			results.appendChild(li);
 			if(!value){
-				
 				li.parentNode.parentNode.className = "fail";
 			}
 

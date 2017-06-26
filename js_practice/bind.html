@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#results li.pass{
+			color: green;
+		}
+		#results li.fail{
+			color: red;
+		}
+		#test1{
+			width: 100px;
+			height: 100px;
+			border: 1px solid blue;
+			position: absolute;
+		}
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<ul id="results">
+
+	</ul>
+
+
+	<input type="button" id="click" value="click">
+</body>
+<script>
+	function assert(value,desc){
+		console.log(value);
+		var li = document.createElement('li');
+		li.className = value == true? "pass" : "fail";
+		li.appendChild(document.createTextNode(desc));
+		results.appendChild(li);
+		
+		if(!value){
+			li.parentNode.className = "fail";
+		}
+
+		return li;
+	}
+
+	function bind(context,name){
+		console.log(this);
+		return function(){
+			console.log(this);
+			return context[name].apply(context,arguments);
+		}
+	}
+
+	var button = {
+		clicked:false,
+		click:function(){
+			this.clicked = true;
+			assert(button.clicked,'the button has been ckicked');
+			console.log(this);
+		}
+	}
+	var btn = document.getElementById('click');
+
+	//這無法
+	//btn.addEventListener('click', button.click, false);
+
+	//這可以，忍者系列
+	//btn.addEventListener('click', bind(button,'click'), false);
+
+	//這可以，民工系列
+	btn.addEventListener('click', function(){
+		console.log(this);
+		button.click();
+	}, false);
+	
+
+
+	Function.prototype.mybind = function(){
+		var fn = this;
+
+		var args = Array.prototype.slice.call(arguments);
+		console.log(arguments);
+		var object = args.shift();
+		console.log(object);
+		console.log(args);
+
+		return function(){
+			console.log(args.concat(Array.prototype.slice.call(arguments)));
+			console.log(Array.prototype.slice.call(arguments));
+			return fn.apply(object,Array.prototype.slice.call(arguments));
+		}
+	}
+	
+	var myObject = {};
+
+	function myFn(){
+		console.log(this);
+		return this == myObject;
+	}
+
+	assert(!myFn(),'context not set yet');
+
+	var aFn = myFn.mybind(myObject);
+
+	assert(aFn(1,2,3),'context is set already');
+
+</script>
+</html>

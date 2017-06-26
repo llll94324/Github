@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#results li.pass{
+			color: green;
+		}
+		#results li.fail{
+			color: red;
+		}
+		#test1{
+			width: 100px;
+			height: 100px;
+			border: 1px solid blue;
+			position: absolute;
+		}
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<ul id="results">
+
+	</ul>
+
+	<div id = 'test1'>
+		
+	</div>
+
+</body>
+<script>
+	function assert(value,desc){
+		console.log(value);
+		var li = document.createElement('li');
+		li.className = value ? "pass" : "fail";
+		li.appendChild(document.createTextNode(desc));
+		results.appendChild(li);
+		
+		if(!value){
+			li.parentNode.className = "fail";
+		}
+
+		return li;
+	}
+
+
+	function animateIt(elementId){
+		var elem = document.getElementById(elementId);
+		var tick = 0;
+		var timer = setInterval(function(){
+			if(tick < 100){
+				elem.style.left = elem.style.top = tick + "px";
+				tick++;
+
+			}else {
+				clearInterval(timer);
+				assert(tick == 100,'tick == 100');
+				assert(elem,'elem is exist');
+				assert(timer,'timer is exist');
+			}
+		},10);
+	}
+	animateIt('test1');
+</script>
+</html>
