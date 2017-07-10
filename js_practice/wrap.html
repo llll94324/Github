@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#results li.pass{
+			color: green;
+		}
+		#results li.fail{
+			color: red;
+		}
+		#test1{
+			width: 100px;
+			height: 100px;
+			border: 1px solid blue;
+			position: absolute;
+		}
+
+	</style>
+</head>
+<body style="background-color: #c6c6c6">
+	<ul id="results">
+
+	</ul>
+
+
+	<input type="button" id="click" value="click">
+</body>
+<script>
+	function assert(value,desc){
+		console.log(value);
+		var li = document.createElement('li');
+		li.className = value == true? "pass" : "fail";
+		li.appendChild(document.createTextNode(desc));
+		results.appendChild(li);
+		
+		if(!value){
+			li.parentNode.className = "fail";
+		}
+
+		return li;
+	}
+
+	function Ninja(){
+		this.t = true;
+		this.test = function(){
+			return this.t;
+		}
+	}
+
+	var n1 = new Ninja();
+
+	var n2 = new Ninja();
+
+	assert(n1.constructor == n2.constructor,'...');
+</script>
+</html>
