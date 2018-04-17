@@ -161,6 +161,9 @@ footer{
 form {
 	margin: 1em 0 2em 0;
 }
+form div{
+	width: 100%;
+}
 #footer{
 	padding-top: 1em;
 	background: #6cc091;
@@ -173,10 +176,10 @@ form input{
   border: solid 2px #8dccaf;
   color: #fff;
   display: block;
-  width: 100%;
+  width: 96%;
   height: 2.75em;
   padding: 0 1em;
-	margin: 0.7em 0 0.7em 1em;
+	margin: 0.7em auto;
 }
 #footer label{
 	text-align: left;
@@ -198,8 +201,8 @@ form textarea{
 	border: solid 2px #8dcca9;
 	color: #fff;
 	display: block;
-	margin: 0.7em 0 0.7em 1em;
-	width: 100%;
+	margin: 0.7em auto;
+	width: 96%;
 	padding: 0.6em 0em 0em 0.8em;
 }
 .white{
@@ -209,4 +212,23 @@ form textarea{
 }
 .button.white:hover {
 	background-color: #7ec89e;
+}
+#cta {
+
+  color: rgba(255, 255, 255, 0.75);
+  background-attachment: fixed;
+  background-image: linear-gradient(rgba(206, 27, 40, 0.25), rgba(206, 27, 40, 0.25)), url(images/cta01.jpg);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+	min-height: 350px;
+}
+#cta div{
+	padding-top: 10px;
+}
+#cta h1{
+	font-style: normal;
+	font-size: 2em;
+	margin: 20px auto;
 }
