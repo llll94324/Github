@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/7/trees/51/" target="_blank">將有序數組轉換為二叉搜索樹</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>將一個按照升序排列的有序數組，轉換為一棵高度平衡二叉搜索樹。</p>
+
+   <pre class='description'>給定有序數組: [-10,-3,0,5,9],
+
+一個可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面這個高度平衡二叉搜索樹：
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+</pre>
+
+    <pre>
+      <code>
+  /**
+   * Definition for a binary tree node.
+   * function TreeNode(val) {
+   *     this.val = val;
+   *     this.left = this.right = null;
+   * }
+   */
+  /**
+   * @param {number[]} nums
+   * @return {TreeNode}
+   */
+  var sortedArrayToBST = function(nums) {
+      if(!nums){
+          return null
+      }
+      function add(nums,low,high){
+          if(low > high){
+             return null;
+          }
+          let mid = Math.floor(low + (high - low) / 2);
+          var node = new TreeNode(nums[mid]);
+          node.left = add(nums,low,mid-1);
+          node.right = add(nums,mid+1,high);
+          return node;
+      }
+      return add(nums,0,nums.length-1)
+      
+  };
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

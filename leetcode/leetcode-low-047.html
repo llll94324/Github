@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/26/others/67/" target="_blank">帕斯卡三角形</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>給定一個非負整數 numRows，生成楊輝三角的前 numRows 行。</p>
+   <pre class='description'><strong>輸入:</strong> 5
+<strong>輸出:</strong>
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]</pre>
+
+    <pre>
+      <code>
+  /**
+   * @param {number} numRows
+   * @return {number[][]}
+   */
+  var generate = function(numRows) {
+     if (numRows == 0) return []
+      if (numRows == 1) return [[1]]
+      if (numRows == 2) return [[1], [1, 1]]
+      let ans = [[1], [1, 1]]
+      for (let len = 2; len < numRows; len++) {
+          let row = [1]
+          for (let i = 1; i < len; i++) {
+              row.push(ans[len - 1][i - 1] + ans[len - 1][i])
+          }
+          row.push(1)
+          ans.push(row)
+      }
+      return ans
+  };
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

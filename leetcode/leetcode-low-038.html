@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/24/design/58/" target="_blank">Shuffle an Array</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>打亂一個沒有重復元素的數組。</p>
+
+   <pre class='description'>// 以數字集合 1, 2 和 3 初始化數組。
+int[] nums = {1,2,3};
+Solution solution = new Solution(nums);
+
+// 打亂數組 [1,2,3] 並返回結果。任何 [1,2,3]的排列返回的概率應該相同。
+solution.shuffle();
+
+// 重設數組到它的初始狀態[1,2,3]。
+solution.reset();
+
+// 隨機返回數組[1,2,3]打亂後的結果。
+solution.shuffle();
+</pre>
+
+    <pre>
+      <code>
+  /**
+   * @param {number[]} nums
+   */
+  var Solution = function(nums) {
+      this.resetVal  = [...nums];
+      this.nums = [...nums];
+  };
+
+  /**
+   * Resets the array to its original configuration and return it.
+   * @return {number[]}
+   */
+  Solution.prototype.reset = function() {
+      return this.resetVal
+  };
+
+  /**
+   * Returns a random shuffling of the array.
+   * @return {number[]}
+   */
+  Solution.prototype.shuffle = function() {
+      this.resetVal = this.nums;
+      let nums = this.nums.slice(),
+          n = nums.length,i;
+      while(n){
+          i = Math.floor(Math.random()*n--);
+          let t = nums[i];
+          nums[i] = nums[n];
+          nums[n] = t;
+      }
+      return nums
+  };
+
+  /** 
+   * Your Solution object will be instantiated and called as such:
+   * var obj = new Solution(nums)
+   * var param_1 = obj.reset()
+   * var param_2 = obj.shuffle()
+   */
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/30/" target="_blank">有效的數獨</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>判斷一個 9x9 的數獨是否有效。只需要根據以下規則，驗證已經填入的數字是否有效即可。</p>
+    <p class='description'>數字 1-9 在每一行只能出現一次。</p>
+    <p class='description'>數字 1-9 在每一列只能出現一次。</p>
+    <p class='description'>數字 1-9 在每一個分隔的 3x3 宮內只能出現一次。</p>
+    
+
+    <pre class='description'><strong>輸入:</strong>
+[
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]
+<strong>輸出:</strong> true
+</pre>
+
+    <pre>
+      <code>
+  /**
+   * @param {character[][]} board
+   * @return {boolean}
+   */
+  var isValidSudoku = function(board) {
+      for(var i = 0;i < 9 ;i++){
+          var temp1 ={};
+          var temp2 ={};
+          var temp3 ={};
+          for(var j = 0; j < 9;j++){
+              var x = parseInt(i/3) * 3 + parseInt(j/3);
+              var y = parseInt(i%3) * 3 + j % 3;
+              if(temp1[board[i][j]]){
+                 return false;
+              }
+              if(board[i][j] !== "."){
+                 temp1[board[i][j]] = true;
+              }
+            
+              if(temp2[board[j][i]]){
+                 return false;
+              }
+              if(board[j][i] !== "."){
+                 temp2[board[j][i]] = true;
+              }
+              
+               if(temp3[board[x][y]]){
+                 return false;
+              }
+              if(board[x][y] !== "."){
+                 temp3[board[x][y]] = true;
+              }
+          }
+      }
+      return true
+  };
+      </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

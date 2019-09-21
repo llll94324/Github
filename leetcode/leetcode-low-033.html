@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/8/sorting-and-searching/53/" target="_blank">第一個錯誤的版本</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>假設你有 n 個版本 [1, 2, ..., n]，你想找出導致之後所有版本出錯的第一個錯誤的版本。</p>
+
+   <pre class='description'>給定 n = 5，並且 version = 4 是第一個錯誤的版本。
+
+<code>調用 isBadVersion(3) -&gt; false
+調用 isBadVersion(5)&nbsp;-&gt; true
+調用 isBadVersion(4)&nbsp;-&gt; true
+
+所以，4 是第一個錯誤的版本。&nbsp;</code></pre>
+
+    <pre>
+      <code>
+  /**
+   * Definition for isBadVersion()
+   * 
+   * @param {integer} version number
+   * @return {boolean} whether the version is bad
+   * isBadVersion = function(version) {
+   *     ...
+   * };
+   */
+
+  /**
+   * @param {function} isBadVersion()
+   * @return {function}
+   */
+  var solution = function(isBadVersion) {
+      /**
+       * @param {integer} n Total versions
+       * @return {integer} The first bad version
+       */
+      return function(n) {
+          let min = 0,
+              max = n,
+              guess;
+          while(min <= max){
+              guess = Math.floor((min+max)/2); 
+              if(isBadVersion(guess)){
+                  if(!isBadVersion(guess-1)){
+                      return guess;
+                  }else{
+                      max = guess-1;
+                  }
+              }else{
+                  min = guess+1;
+              }
+          }
+          
+      };
+  };
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

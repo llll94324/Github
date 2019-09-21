@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/50/sorting-and-searching/99/" target="_blank">尋找峰值</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>峰值元素是指其值大於左右相鄰值的元素。</p>
+    <p class='description'>給定一個輸入數組 nums，其中 nums[i] ≠ nums[i+1]，找到峰值元素並返回其索引。</p>
+    <p class='description'>數組可能包含多個峰值，在這種情況下，返回任何一個峰值所在位置即可。</p>
+    <p class='description'>你可以假設 nums[-1] = nums[n] = -∞。</p>
+    <pre class='description'><strong>輸入:</strong> <strong>nums</strong> = <code>[1,2,3,1]</code>
+<strong>輸出:</strong> 2
+<strong>解釋: </strong>3 是峰值元素，你的函數應該返回其索引 2。</pre>
+
+    <pre>
+      <code>
+  /**
+   * @param {number[]} nums
+   * @return {number}
+   */
+  var findPeakElement = function(nums) {
+    var len = nums.length;
+    nums[-1] = nums[len] = -Number.MAX_VALUE;
+    for(var i = 0; i < len; i++) {
+      if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1])
+        return i;
+    }  
+  };
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

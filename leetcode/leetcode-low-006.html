@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+	html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+	font-family: "Helvetica","Microsoft YaHei","黑体","宋体",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+	display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑体","宋体",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+	
+	<div class='target'>
+		 	<a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/26/" target="_blank">兩個數組的交集 II</a>
+	</div>
+
+	<div class='body'>
+    <p class='description'>給定兩個數組，編寫一個函數來計算它們的交集。</p>
+    <pre class='description'><strong>輸入: </strong>nums1 = [1,2,2,1], nums2 = [2,2]
+<strong>輸出: </strong>[2,2]
+</pre>
+    <pre>
+      <code>
+  /**
+   * @param {number[]} nums1
+   * @param {number[]} nums2
+   * @return {number[]}
+   */
+  let intersect = function(nums1, nums2) {
+      let res = [];
+      let map = {};
+      for (let e of nums1) {
+          map[e] = map[e] + 1 || 1;
+      }
+      for (let e of nums2) {
+          if (map[e]) {
+              res.push(e);
+              map[e]--;
+          }
+      }
+      return res;
+  };
+      </code>
+    </pre>
+	  
+  </div>
+	
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

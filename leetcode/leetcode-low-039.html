@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/24/design/59/" target="_blank">最小棧</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>設計一個支持 push，pop，top 操作，並能在常數時間內檢索到最小元素的棧。</p>
+
+   <pre class='description'>MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --&gt; 返回 -3.
+minStack.pop();
+minStack.top();      --&gt; 返回 0.
+minStack.getMin();   --&gt; 返回 -2.
+</pre>
+
+    <pre>
+      <code>
+  /**
+   * initialize your data structure here.
+   */
+  var MinStack = function() {
+    this.stack = [];
+    this.minStack = [];
+  };
+
+  /** 
+   * @param {number} x
+   * @return {void}
+   */
+  MinStack.prototype.push = function(x) {
+    if (!this.minStack.length || this.minStack[this.minStack.length - 1] >= x) {
+      this.minStack.push(x);
+    }
+    this.stack.push(x);
+  };
+
+  /**
+   * @return {void}
+   */
+  MinStack.prototype.pop = function() {
+    const elem = this.stack.pop();
+    if (this.minStack.length > 0 && this.minStack[this.minStack.length - 1] === elem) {
+      this.minStack.pop();
+    }
+  };
+
+  /**
+   * @return {number}
+   */
+  MinStack.prototype.top = function() {
+    return this.stack[this.stack.length - 1];
+  };
+
+  /**
+   * @return {number}
+   */
+  MinStack.prototype.getMin = function() {
+    return this.minStack[this.minStack.length - 1];
+  };
+
+  /** 
+   * Your MinStack object will be instantiated and called as such:
+   * var obj = Object.create(MinStack).createNew()
+   * obj.push(x)
+   * obj.pop()
+   * var param_3 = obj.top()
+   * var param_4 = obj.getMin()
+   */
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

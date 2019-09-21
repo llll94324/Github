@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/26/" target="_blank">旋轉圖像</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>給定一個 n × n 的二維矩陣表示一個圖像。</p>
+    <p class='description'>將圖像順時針旋轉 90 度。</p>
+    <pre class='description'>給定 <strong>matrix</strong> = 
+[
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+],
+
+<strong>原地</strong>旋轉輸入矩陣，使其變為:
+[
+  [7,4,1],
+  [8,5,2],
+  [9,6,3]
+]
+</pre>
+    <pre>
+      <code>
+  /**
+   * @param {number[][]} matrix
+   * @return {void} Do not return anything, modify matrix in-place instead.
+   */
+  var rotate = function (matrix) {
+      matrix.reverse()
+      for (let i = 0; i < matrix.length-1; i++) {
+          for (let j = i + 1; j < matrix[0].length; j++) {
+              matrix[i][j] ^= matrix[j][i]
+              matrix[j][i] ^= matrix[i][j]
+              matrix[i][j] ^= matrix[j][i]
+          }
+      }
+  };
+      </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

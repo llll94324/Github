@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/5/strings/37/" target="_blank">字符串轉換整數 (atoi)</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>請你來實現一個 atoi 函數，使其能將字符串轉換成整數。</p>
+    <pre class='description'><strong>輸入:</strong> "4193 with words"
+<strong>輸出:</strong> 4193
+<strong>解釋:</strong> 轉換截止於數字 '3' ，因為它的下一個字符不為數字。
+</pre>
+    <pre>
+      <code>
+  /**
+   * @param {string} str
+   * @return {number}
+   */
+  var myAtoi = function(str) {
+      str = str.trim().match(/^(-?||\+?)\d+/)
+      if(str == null){
+         return 0;
+      }
+      str = str[0];
+      
+      var r = true;
+      if(str[0] == "-"){
+         r = false;
+      }
+      str = Math.abs(parseInt(str))
+      
+      if(str>Math.pow(2,31)-1) return r?Math.pow(2,31)-1:-Math.pow(2,31);
+      return r?str:-str;
+  };
+      </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

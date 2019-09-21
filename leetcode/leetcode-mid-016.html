@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/49/backtracking/91/" target="_blank">電話號碼的字母組合</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>給定一個僅包含數字 2-9 的字符串，返回所有它能表示的字母組合。</p>
+    <p class='description'>給出數字到字母的映射如下（與電話按鍵相同）。注意 1 不對應任何字母。</p>
+    <pre class='description'><strong>輸入：</strong>"23"
+<strong>輸出：</strong>["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+</pre>
+
+    <pre>
+      <code>
+  
+  var letterCombinations = function(digits) {
+      let dic = {
+          2: 'abc',
+          3: 'def',
+          4: 'ghi',
+          5: 'jkl',
+          6: 'mno',
+          7: 'pqrs',
+          8: 'tuv',
+          9: 'wxyz'
+      };
+      
+      if(!digits) return [];
+      else if(digits.length == 1) return [...dic[digits]]
+
+      result = [...dic[digits[0]]]
+
+      for(var i = 1; i < digits.length ; i++){
+          
+          var arr = []
+          for(let d of result){
+              for(let letter of dic[digits[i]]){
+                  arr.push(d + letter)
+              }
+          }
+          result = arr;
+
+      }
+      return arr;
+  };
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/31/linked-list/82/" target="_blank">兩數相加</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>給出兩個 非空 的鏈表用來表示兩個非負的整數。其中，它們各自的位數是按照 逆序 的方式存儲的，並且它們的每個節點只能存儲 一位 數字。</p>
+    <pre class='description'><strong>輸入：</strong>(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+<strong>輸出：</strong>7 -&gt; 0 -&gt; 8
+<strong>原因：</strong>342 + 465 = 807
+</pre>
+
+    <pre>
+      <code>
+  /**
+   * Definition for singly-linked list.
+   * function ListNode(val) {
+   *     this.val = val;
+   *     this.next = null;
+   * }
+   */
+  /**
+   * @param {ListNode} l1
+   * @param {ListNode} l2
+   * @return {ListNode}
+   */
+  var addTwoNumbers = function(l1, l2) {
+      //carry為進位，初始化為0   
+      var c1 = l1, c2 = l2, c3, l3, carry = 0;
+
+      while(c1 || c2 || carry) {
+          var v1 = 0, v2 = 0;
+
+          if(c1) {
+              //根據前文給出的代碼結構val、next
+              v1 = c1.val;
+              c1 = c1.next;
+          }
+
+          if (c2) {
+              v2 = c2.val;
+              c2 = c2.next;
+          }
+
+          var sum = v1 + v2 + carry;
+          carry = Math.floor(sum / 10);//得到進位
+
+          if(!c3) {
+              l3 = new ListNode(sum % 10);
+              c3 = l3;
+          } else {
+              c3.next = new ListNode(sum % 10);
+              c3 = c3.next;
+          }
+      }
+      return l3;
+
+  };
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

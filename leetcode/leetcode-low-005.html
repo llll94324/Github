@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+	html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+	font-family: "Helvetica","Microsoft YaHei","黑体","宋体",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+	display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑体","宋体",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+	
+	<div class='target'>
+		 	<a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/25/" target="_blank">只出現一次的數字</a>
+	</div>
+
+	<div class='body'>
+    <p class='description'>給定一個非空整數數組，除了某個元素只出現一次以外，其余每個元素均出現兩次。找出那個只出現了一次的元素。</p>
+    <pre class='description'><strong>輸入:</strong> [2,2,1]
+<strong>輸出:</strong> 1
+</pre>
+    <pre>
+      <code>
+  /**
+   * @param {number[]} nums
+   * @return {number}
+   */
+  var singleNumber = function(nums) {
+      var arr = [...nums];
+      var c = 0;
+      for(var i = 0; i < nums.length;i++){
+          if(nums.indexOf(nums[i]) != i){
+              arr.splice(arr.indexOf(nums[i]),1);
+              arr.splice(arr.indexOf(nums[i]),1);
+          }
+      }
+      return arr[0];
+  };
+      </code>
+    </pre>
+	  
+  </div>
+	
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

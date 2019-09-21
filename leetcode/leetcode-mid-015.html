@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/32/trees-and-graphs/90/" target="_blank">島嶼數量</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>給定一個由 '1'（陸地）和 '0'（水）組成的的二維網格，計算島嶼的數量。一個島被水包圍，並且它是通過水平方向或垂直方向上相鄰的陸地連接而成的。你可以假設網格的四個邊均被水包圍。</p>
+    <pre class='description'><strong>輸入:</strong>
+11000
+11000
+00100
+00011
+
+<strong>輸出: </strong>3
+</pre>
+
+    <pre>
+      <code>
+  /**
+   * @param {character[][]} grid
+   * @return {number}
+   */
+  var numIslands = function(grid) {
+      let h = grid.length;
+      if(grid==[]||h==0)
+          {
+              return 0
+          }
+      let l = grid[0].length,count=0;
+      if(l==0){return 0}
+      for(let i = 0;i < h;i++)
+          {
+              for(let j =0;j < l;j++)
+                  {
+                      if(grid[i][j]=='1')
+                          {
+                              findl(i,j,grid)
+                              count++;
+                          }
+                  }
+          }
+      return count
+  };
+  var findl = function(i,j,grid)
+      {
+          let h = grid.length,l=grid[0].length;
+          grid[i][j]=2
+          if(i>h-1&&j>l-1)
+              {return}
+          if(i > 0 && grid[i-1][j]=='1')
+              {
+                  findl(i-1,j,grid)
+              }
+          if(i < h-1 && grid[i+1][j]=='1')
+              {
+                  findl(i+1,j,grid)
+              }
+          if(j > 0&&grid[i][j-1]=='1')
+              {
+                  findl(i,j-1,grid)
+              }
+          if(j < l-1&&grid[i][j+1]=='1')
+              {
+                  findl(i,j+1,grid)
+              }
+      }
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

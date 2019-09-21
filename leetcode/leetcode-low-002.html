@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+	html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+	font-family: "Helvetica","Microsoft YaHei","黑体","宋体",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+	display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑体","宋体",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+	
+	<div class='target'>
+		 	<a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-easy/1/array/22/" target="_blank">買賣股票的最佳時機 II</a>
+	</div>
+
+	<div class='body'>
+    <p class='description'>給定一個數組，它的第 i 個元素是一支給定股票第 i 天的價格。</p>
+    <p class='description'>設計一個算法來計算你所能獲取的最大利潤。你可以盡可能地完成更多的交易（多次買賣一支股票）。</p>
+    <pre class='description'><strong>輸入:</strong> [7,1,5,3,6,4]
+<strong>輸出:</strong> 7
+<strong>解釋:</strong> 在第 2 天（股票價格 = 1）的時候買入，在第 3 天（股票價格 = 5）的時候賣出, 這筆交易所能獲得利潤 = 5-1 = 4 。
+隨後，在第 4 天（股票價格 = 3）的時候買入，在第 5 天（股票價格 = 6）的時候賣出, 這筆交易所能獲得利潤 = 6-3 = 3 。
+</pre>
+    <pre>
+      <code>
+  /**
+   * @param {number[]} prices
+   * @return {number}
+   */
+  var maxProfit = function(prices) {
+      let maxProfit = 0
+      let curMin = prices[0]
+      for(let i = 1; i < prices.length; i++){
+          if (prices[i] > curMin) {
+              maxProfit += prices[i] - curMin
+          }
+          curMin = prices[i]
+      }
+      return maxProfit
+  };
+      </code>
+    </pre>
+	  
+  </div>
+	
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 

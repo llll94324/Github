@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css" media="screen">
+  html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #2D2D2D;
+  font-size: 20px;
+}
+
+.container {
+  height: 100%;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  display: block;
+  margin: auto;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+a:after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  right: 25px;
+  left: 25px;
+  background-color: #ffffff;
+  transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+a:hover {
+  color: #2D2D2D;
+}
+a:hover:after {
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.back{
+  display: unset;
+  font-size: 30px;
+  left: -180px;
+  position: relative;
+  margin: 0;
+}
+
+.target{
+  width: auto;
+  display: inline-block;
+}
+.description{
+  font-family: "Helvetica","Microsoft YaHei","黑體","宋體",sans-serif;
+  padding: 20px 20px 0px 20px;
+  color: brown;
+}
+pre{
+  margin: 0;
+  color: cyan;
+}
+</style>
+<body>
+  
+  <div class='target'>
+      <a href="https://leetcode-cn.com/explore/interview/card/top-interview-questions-medium/50/sorting-and-searching/96/" target="_blank">顏色分類</a>
+  </div>
+
+  <div class='body'>
+    <p class='description'>給定一個包含紅色、白色和藍色，一共 n 個元素的數組，原地對它們進行排序，使得相同顏色的元素相鄰，並按照紅色、白色、藍色順序排列。</p>
+    <p class='description'>此題中，我們使用整數 0、 1 和 2 分別表示紅色、白色和藍色。</p>
+    <pre class='description'><strong>輸入:</strong> [2,0,2,1,1,0]
+<strong>輸出:</strong> [0,0,1,1,2,2]</pre>
+
+    <pre>
+      <code>
+  /**
+   * @param {number[]} nums
+   * @return {void} Do not return anything, modify nums in-place instead.
+   */
+  function swap(nums, idx1, idx2) {
+      let temp = nums[idx1];
+      nums[idx1] = nums[idx2];
+      nums[idx2] = temp;
+  }
+
+  function sortColors(nums){
+    var left = 0
+    var right = nums.length - 1
+    while(left < right && nums[left] == 0){
+      left++
+    }
+    while(left < right && nums[right] == 2){
+      right--
+    }
+
+    for(var i = left; i <= right;){
+      if(nums[i] == 2){
+        swap(nums,i,right)
+        right--
+      }else if(nums[i] == 0){
+        if(left == i){
+          left++
+          i++
+        }else{
+          swap(nums,i,left)
+          left++
+        }
+      }else{
+        i++
+      }
+    }
+  }
+  </code>
+    </pre>
+    
+  </div>
+  
+  <div class='target'>
+      <a href="./leetcode-list.html" >&#x21A9</a>
+  </div>
+
+
+
+</body>
+</html> 
